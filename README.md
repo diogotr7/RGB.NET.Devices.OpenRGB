@@ -1,5 +1,5 @@
 # RGB.NET.Devices.OpenRGB
- OpenRGB DeviceProvider for RGB.NET
+WIP OpenRGB DeviceProvider for RGB.NET
 
 Projects used: 
 OpenRGB.NET by diogotr7
