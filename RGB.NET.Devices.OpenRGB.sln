@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29924.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGB.NET.Devices.OpenRGB", "RGB.NET.Devices.OpenRGB\RGB.NET.Devices.OpenRGB.csproj", "{D328348B-CCCF-4C47-BDAA-8D4723EC75E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D328348B-CCCF-4C47-BDAA-8D4723EC75E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D328348B-CCCF-4C47-BDAA-8D4723EC75E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D328348B-CCCF-4C47-BDAA-8D4723EC75E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D328348B-CCCF-4C47-BDAA-8D4723EC75E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8CF71171-8B2C-4273-8808-AD265324BF55}
+	EndGlobalSection
+EndGlobal

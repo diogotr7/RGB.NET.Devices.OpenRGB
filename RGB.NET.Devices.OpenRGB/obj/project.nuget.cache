@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZePqa91H4f2CwqGYp+Ob5SWv7/x3hHwH3BWRa7wLxrj37+s/ZMI9ZBCU0bt3P/dB8NFUWRApPiuOzuNsqQxwAA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Niels\\source\\repos\\RGB.NET.Devices.OpenRGB\\RGB.NET.Devices.OpenRGB\\RGB.NET.Devices.OpenRGB.csproj",
+  "expectedPackageFiles": [
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\Niels\\.nuget\\packages\\rgb.net.core\\0.1.32\\rgb.net.core.0.1.32.nupkg.sha512"
+  ],
+  "logs": []
+}

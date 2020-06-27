@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RGB.NET.Core" Version="0.1.32" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="OpenRGB.NET">
+      <HintPath>..\..\OpenRGB.NET\OpenRGB.NET\bin\Debug\netstandard2.0\OpenRGB.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
