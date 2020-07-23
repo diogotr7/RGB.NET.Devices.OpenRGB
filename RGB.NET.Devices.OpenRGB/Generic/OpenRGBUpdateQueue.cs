@@ -2,6 +2,7 @@
 using RGB.NET.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -12,19 +13,11 @@ namespace RGB.NET.Devices.OpenRGB
     public class OpenRGBUpdateQueue : UpdateQueue
     {
         #region Properties & Fields
-
-        /// <summary>
-        /// The device to be updated.
-        /// </summary>
-        /// 
-        //OpenRGBDeviceProvider _dp = new OpenRGBDeviceProvider();
-
         private int _deviceid;
 
         private OpenRGBClient _openRGB;
 
         private int _ledcount;
-
         #endregion
 
         #region Constructors
@@ -45,38 +38,15 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Methods
 
-
-
         protected override void Update(Dictionary<object, Color> dataSet)
         {
-            try
+            var colors = Enumerable.Range(0, _ledcount).Select(_ => new OpenRGBColor()).ToArray();
+            foreach(var data in dataSet)
             {
-                OpenRGBColor[] list = new OpenRGBColor[_ledcount];
-                for (int i = 0; i < _ledcount; i++)
-                {
-                    list[i] = new OpenRGBColor();
-                }
-
-                //int index;
-
-                foreach (KeyValuePair<object, Color> data in dataSet)
-                {
-                    //index = (int)data.Key;
-                    //list[index] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
-
-
-                    for (int j = 0; j < _ledcount; j++)
-                    {
-                        list[j] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
-                    }
-
-                }
-
-
-                _openRGB.UpdateLeds(_deviceid, list);
+                colors[(int)data.Key] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
             }
-            catch (Exception ex)
-            { throw; }
+
+            _openRGB.UpdateLeds(_deviceid, colors);
         }
 
         #endregion
