@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using OpenRGB.NET;
+﻿using OpenRGB.NET;
 using RGB.NET.Core;
+using System;
+using System.Collections.Generic;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -33,7 +33,7 @@ namespace RGB.NET.Devices.OpenRGB
         /// Initializes a new instance of the <see cref="AsusUpdateQueue"/> class.
         /// </summary>
         /// <param name="updateTrigger">The update trigger used by this queue.</param>
-        public OpenRGBUpdateQueue(IDeviceUpdateTrigger updateTrigger, int deviceid, OpenRGBClient client , int ledcount)
+        public OpenRGBUpdateQueue(IDeviceUpdateTrigger updateTrigger, int deviceid, OpenRGBClient client, int ledcount)
             : base(updateTrigger)
         {
             this._deviceid = deviceid;
@@ -64,12 +64,12 @@ namespace RGB.NET.Devices.OpenRGB
                     //index = (int)data.Key;
                     //list[index] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
 
-                    
+
                     for (int j = 0; j < _ledcount; j++)
                     {
                         list[j] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
                     }
-                    
+
                 }
 
 

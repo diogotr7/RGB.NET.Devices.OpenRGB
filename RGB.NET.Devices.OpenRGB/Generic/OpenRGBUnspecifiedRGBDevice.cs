@@ -13,7 +13,7 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Constructors
 
-       
+
         internal OpenRGBUnspecifiedRGBDevice(OpenRGBDeviceInfo info)
             : base(info)
         {
@@ -31,7 +31,7 @@ namespace RGB.NET.Devices.OpenRGB
             {
                 InitializeLed(LedId.Custom1 + i, new Rectangle(i * 10, 0, 10, 10));
             }
-                
+
 
             //TODO DarthAffe 19.05.2019: Add a way to define a layout for this kind of devies
         }

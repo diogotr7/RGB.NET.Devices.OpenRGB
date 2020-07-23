@@ -1,5 +1,5 @@
-﻿using System;
-using RGB.NET.Core;
+﻿using RGB.NET.Core;
+using System;
 
 namespace RGB.NET.Devices.OpenRGB
 {
