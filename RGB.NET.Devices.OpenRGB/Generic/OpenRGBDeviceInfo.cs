@@ -1,5 +1,6 @@
 ﻿using RGB.NET.Core;
 using System;
+using OpenRGBDevice = OpenRGB.NET.Models.Device;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -11,17 +12,19 @@ namespace RGB.NET.Devices.OpenRGB
     {
         #region Properties & Fields
 
+        public int OpenRGBDeviceIndex { get; }
+
         /// <inheritdoc />
         public RGBDeviceType DeviceType { get; }
 
         /// <inheritdoc />
-        public string DeviceName { get; }
+        public string DeviceName => OpenRGBDevice.Name;
 
         /// <inheritdoc />
-        public string Manufacturer { get; }
+        public string Manufacturer => "OpenRGB";
 
         /// <inheritdoc />
-        public string Model { get; }
+        public string Model => OpenRGBDevice.Name;
 
         /// <inheritdoc />
         public Uri Image { get; set; }
@@ -32,19 +35,16 @@ namespace RGB.NET.Devices.OpenRGB
         /// <inheritdoc />
         public RGBDeviceLighting Lighting => RGBDeviceLighting.Key;
 
-
-        #endregion
+        public OpenRGBDevice OpenRGBDevice { get; }
+        #endregion 
 
         #region Constructors
 
-
-        internal OpenRGBDeviceInfo(RGBDeviceType deviceType, string model = null, string manufacturer = "OpenRGB")
+        internal OpenRGBDeviceInfo(int deviceIndex, RGBDeviceType deviceType, OpenRGBDevice device)
         {
+            this.OpenRGBDeviceIndex = deviceIndex;
             this.DeviceType = deviceType;
-            this.Model = model;
-            this.Manufacturer = manufacturer;
-
-            DeviceName = $"{Manufacturer} {Model}";
+            this.OpenRGBDevice = device;
         }
 
         #endregion

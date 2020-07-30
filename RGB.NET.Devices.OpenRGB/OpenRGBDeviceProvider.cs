@@ -1,9 +1,9 @@
 ﻿using OpenRGB.NET;
-using OpenRGB.NET.Enums;
 using RGB.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using OpenRGBDeviceType = OpenRGB.NET.Enums.DeviceType;
 using System.Linq;
 
 namespace RGB.NET.Devices.OpenRGB
@@ -24,9 +24,9 @@ namespace RGB.NET.Devices.OpenRGB
 
         public IEnumerable<IRGBDevice> Devices { get; private set; }
 
-        public OpenRGBClient openRgb { get; private set; }
-
         public DeviceUpdateTrigger UpdateTrigger { get; }
+
+        private OpenRGBClient _openRgb;
 
         #endregion
 
@@ -52,30 +52,30 @@ namespace RGB.NET.Devices.OpenRGB
             try
             {
                 UpdateTrigger?.Stop();
-                openRgb = new OpenRGBClient(name: "RGB.NET");
-                openRgb.Connect();
+                _openRgb = new OpenRGBClient(name: "RGB.NET");
+                _openRgb.Connect();
 
                 IList<IRGBDevice> devices = new List<IRGBDevice>();
+                int deviceCount = _openRgb.GetControllerCount();
 
-                foreach (var (index, device) in openRgb.GetAllControllerData().Select((value, i) => (i, value)))
+                for (int i = 0; i < deviceCount; i++)
                 {
+                    var device = _openRgb.GetControllerData(i);
+
                     IOpenRGBDevice rgbDevice = null;
                     switch (device.Type)
                     {
                         case OpenRGBDeviceType.Keyboard:
-                            rgbDevice = new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(RGBDeviceType.Keyboard, device.Name));
+                            rgbDevice = new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device));
                             break;
-                        case OpenRGBDeviceType.Mouse:
-                            rgbDevice = new OpenRGBMouseDevice(new OpenRGBDeviceInfo(RGBDeviceType.Mouse, device.Name));
-                            break;
+                            //TODO: other device types
                         default:
-                            rgbDevice = new OpenRGBUnspecifiedRGBDevice(new OpenRGBDeviceInfo(RGBDeviceType.Unknown, device.Name));
                             break;
                     }
 
                     if ((rgbDevice != null) && loadFilter.HasFlag(rgbDevice.DeviceInfo.DeviceType))
                     {
-                        rgbDevice.Initialize(new OpenRGBUpdateQueue(UpdateTrigger, index, openRgb, device.Leds.Length), device.Leds.Length);
+                        rgbDevice.Initialize(new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb));
                         devices.Add(rgbDevice);
                     }
                 }
@@ -85,7 +85,7 @@ namespace RGB.NET.Devices.OpenRGB
                 Devices = new ReadOnlyCollection<IRGBDevice>(devices);
                 IsInitialized = true;
             }
-            catch (Exception ex)
+            catch
             {
                 if (throwExceptions)
                     throw;

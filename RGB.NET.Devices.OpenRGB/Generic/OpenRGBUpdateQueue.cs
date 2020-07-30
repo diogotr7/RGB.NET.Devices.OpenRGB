@@ -3,6 +3,7 @@ using RGB.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRGBColor = OpenRGB.NET.Models.Color;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -13,11 +14,9 @@ namespace RGB.NET.Devices.OpenRGB
     public class OpenRGBUpdateQueue : UpdateQueue
     {
         #region Properties & Fields
-        private int _deviceid;
+        private readonly int _deviceid;
 
-        private OpenRGBClient _openRGB;
-
-        private int _ledcount;
+        private readonly OpenRGBClient _openRGB;
         #endregion
 
         #region Constructors
@@ -26,12 +25,11 @@ namespace RGB.NET.Devices.OpenRGB
         /// Initializes a new instance of the <see cref="AsusUpdateQueue"/> class.
         /// </summary>
         /// <param name="updateTrigger">The update trigger used by this queue.</param>
-        public OpenRGBUpdateQueue(IDeviceUpdateTrigger updateTrigger, int deviceid, OpenRGBClient client, int ledcount)
+        public OpenRGBUpdateQueue(IDeviceUpdateTrigger updateTrigger, int deviceid, OpenRGBClient client)
             : base(updateTrigger)
         {
             this._deviceid = deviceid;
             this._openRGB = client;
-            this._ledcount = ledcount;
         }
 
         #endregion
@@ -40,7 +38,7 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected override void Update(Dictionary<object, Color> dataSet)
         {
-            var colors = Enumerable.Range(0, _ledcount).Select(_ => new OpenRGBColor()).ToArray();
+            var colors = Enumerable.Range(0, dataSet.Count).Select(_ => new OpenRGBColor()).ToArray();
             foreach(var data in dataSet)
             {
                 colors[(int)data.Key] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());

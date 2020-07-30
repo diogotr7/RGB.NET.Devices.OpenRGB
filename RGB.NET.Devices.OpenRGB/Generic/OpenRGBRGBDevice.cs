@@ -1,6 +1,7 @@
 ﻿using RGB.NET.Core;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRGBLed = OpenRGB.NET.Models.Led;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -29,11 +30,11 @@ namespace RGB.NET.Devices.OpenRGB
         /// <summary>
         /// Initializes the device.
         /// </summary>
-        public void Initialize(OpenRGBUpdateQueue updateQueue, int ledcount)
+        public void Initialize(OpenRGBUpdateQueue updateQueue)
         {
             UpdateQueue = updateQueue;
 
-            InitializeLayout(ledcount);
+            InitializeLayout();
 
             if (Size == Size.Invalid)
             {
@@ -41,7 +42,8 @@ namespace RGB.NET.Devices.OpenRGB
                 Size = ledRectangle.Size + new Size(ledRectangle.Location.X, ledRectangle.Location.Y);
             }
         }
-        protected abstract void InitializeLayout(int ledcount);
+
+        protected abstract void InitializeLayout();
 
         protected override void UpdateLeds(IEnumerable<Led> ledsToUpdate) => UpdateQueue.SetData(ledsToUpdate.Where(x => x.Color.A > 0));
 
