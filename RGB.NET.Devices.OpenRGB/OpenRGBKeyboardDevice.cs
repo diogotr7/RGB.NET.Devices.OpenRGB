@@ -21,7 +21,12 @@ namespace RGB.NET.Devices.OpenRGB
                         for (int column = 0; column < zone.MatrixMap.Width; column++)
                         {
                             var index = zone.MatrixMap.Matrix[row, column];
-                            if (index != uint.MaxValue && KeyboardLedMapping.Names.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
+
+                            //will be max value if the position does not have an associated key
+                            if (index == uint.MaxValue)
+                                continue;
+
+                            if (KeyboardLedMapping.Names.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
                             {
                                 InitializeLed(ledid, new Point(19 * column, 19 * row), new Size(19 * 19));
                             }

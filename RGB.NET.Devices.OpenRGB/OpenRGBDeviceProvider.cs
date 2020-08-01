@@ -75,7 +75,7 @@ namespace RGB.NET.Devices.OpenRGB
 
                     if ((rgbDevice != null) && loadFilter.HasFlag(rgbDevice.DeviceInfo.DeviceType))
                     {
-                        rgbDevice.Initialize(new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb));
+                        rgbDevice.Initialize(new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb, device));
                         devices.Add(rgbDevice);
                     }
                 }
