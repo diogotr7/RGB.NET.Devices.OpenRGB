@@ -1,5 +1,6 @@
 ﻿using OpenRGB.NET;
 using RGB.NET.Core;
+using RGB.NET.Devices.OpenRGB.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,10 +41,10 @@ namespace RGB.NET.Devices.OpenRGB
             this._device = device;
 
             Mapping = new List<LedId>();
-
+            var dict = LedMappings.Mappings[_device.Type];
             for (int i = 0; i < _device.Leds.Length; i++)
             {
-                if(KeyboardLedMapping.Names.TryGetValue(_device.Leds[i].Name, out var ledId))
+                if(dict.TryGetValue(_device.Leds[i].Name, out var ledId))
                 {
                     Mapping.Add(ledId);
                 }
