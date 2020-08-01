@@ -1,19 +1,14 @@
 ﻿using OpenRGB.NET;
 using RGB.NET.Core;
 using RGB.NET.Devices.OpenRGB.Generic;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRGBColor = OpenRGB.NET.Models.Color;
 using OpenRGBDevice = OpenRGB.NET.Models.Device;
 
-
 namespace RGB.NET.Devices.OpenRGB
 {
-    /// <inheritdoc />
-    /// <summary>
-    /// Represents the update-queue performing updates for asus devices.
-    /// </summary>
+
     public class OpenRGBUpdateQueue : UpdateQueue
     {
         #region Properties & Fields
@@ -28,10 +23,6 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AsusUpdateQueue"/> class.
-        /// </summary>
-        /// <param name="updateTrigger">The update trigger used by this queue.</param>
         public OpenRGBUpdateQueue(IDeviceUpdateTrigger updateTrigger, int deviceid, OpenRGBClient client, OpenRGBDevice device)
             : base(updateTrigger)
         {
@@ -44,7 +35,7 @@ namespace RGB.NET.Devices.OpenRGB
             var dict = LedMappings.Mappings[_device.Type];
             for (int i = 0; i < _device.Leds.Length; i++)
             {
-                if(dict.TryGetValue(_device.Leds[i].Name, out var ledId))
+                if (dict.TryGetValue(_device.Leds[i].Name, out var ledId))
                 {
                     Mapping.Add(ledId);
                 }
@@ -63,7 +54,7 @@ namespace RGB.NET.Devices.OpenRGB
         {
             for (int i = 0; i < _device.Leds.Length; i++)
             {
-                if(dataSet.TryGetValue(Mapping[i], out var clr))
+                if (dataSet.TryGetValue(Mapping[i], out var clr))
                 {
                     _colors[i] = new OpenRGBColor(clr.GetR(), clr.GetG(), clr.GetB());
                 }

@@ -3,15 +3,13 @@ using RGB.NET.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using OpenRGBDeviceType = OpenRGB.NET.Enums.DeviceType;
 using System.Linq;
+using OpenRGBDeviceType = OpenRGB.NET.Enums.DeviceType;
 
 namespace RGB.NET.Devices.OpenRGB
 {
-
     public class OpenRGBDeviceProvider : IRGBDeviceProvider
     {
-
         #region Properties & Fields
 
         private static OpenRGBDeviceProvider _instance;
@@ -44,7 +42,6 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Methods
 
-        /// <inheritdoc />
         public bool Initialize(RGBDeviceType loadFilter = RGBDeviceType.All, bool exclusiveAccessIfPossible = false, bool throwExceptions = false)
         {
             IsInitialized = false;
@@ -104,15 +101,13 @@ namespace RGB.NET.Devices.OpenRGB
             return true;
         }
 
-        /// <inheritdoc />
         public void ResetDevices()
-        {
-            //TODO DarthAffe 11.11.2017: Implement
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
         { }
+
+        public void Dispose()
+        {
+            _openRgb?.Dispose();
+        }
 
         #endregion
     }

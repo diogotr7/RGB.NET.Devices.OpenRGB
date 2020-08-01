@@ -1,7 +1,5 @@
-﻿using RGB.NET.Core;
-using RGB.NET.Devices;
-using System.Linq;
-using OpenRGB.NET.Enums;
+﻿using OpenRGB.NET.Enums;
+using RGB.NET.Core;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -12,9 +10,9 @@ namespace RGB.NET.Devices.OpenRGB
         protected override void InitializeLayout()
         {
             //keyboards should be Matrix zone types
-            foreach(var zone in DeviceInfo.OpenRGBDevice.Zones)
+            foreach (var zone in DeviceInfo.OpenRGBDevice.Zones)
             {
-                if(zone.Type == ZoneType.Matrix)
+                if (zone.Type == ZoneType.Matrix)
                 {
                     for (int row = 0; row < zone.MatrixMap.Height; row++)
                     {

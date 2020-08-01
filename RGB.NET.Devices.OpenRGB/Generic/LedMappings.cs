@@ -1,7 +1,5 @@
 ﻿using RGB.NET.Core;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using OpenRGBDeviceType = OpenRGB.NET.Enums.DeviceType;
 
 namespace RGB.NET.Devices.OpenRGB.Generic

@@ -6,14 +6,12 @@ namespace RGB.NET.Devices.OpenRGB
     {
         #region Properties & Fields
 
-        /// <inheritdoc />
         public bool RequiresInitialization => false;
 
         #endregion
 
         #region Methods
 
-        /// <inheritdoc />
         public IRGBDeviceProvider GetDeviceProvider() => OpenRGBDeviceProvider.Instance;
 
         #endregion

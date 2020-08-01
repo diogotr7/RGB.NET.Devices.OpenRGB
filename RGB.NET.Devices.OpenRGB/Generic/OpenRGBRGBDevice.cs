@@ -1,7 +1,6 @@
 ﻿using RGB.NET.Core;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRGBLed = OpenRGB.NET.Models.Led;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -27,9 +26,6 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Methods
 
-        /// <summary>
-        /// Initializes the device.
-        /// </summary>
         public void Initialize(OpenRGBUpdateQueue updateQueue)
         {
             UpdateQueue = updateQueue;

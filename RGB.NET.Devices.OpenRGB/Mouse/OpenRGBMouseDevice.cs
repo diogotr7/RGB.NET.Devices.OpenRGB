@@ -3,7 +3,7 @@ using RGB.NET.Core;
 
 namespace RGB.NET.Devices.OpenRGB
 {
-    public  class OpenRGBMouseDevice : OpenRGBRGBDevice<OpenRGBDeviceInfo>
+    public class OpenRGBMouseDevice : OpenRGBRGBDevice<OpenRGBDeviceInfo>
     {
         public OpenRGBMouseDevice(OpenRGBDeviceInfo info) : base(info) { }
 
