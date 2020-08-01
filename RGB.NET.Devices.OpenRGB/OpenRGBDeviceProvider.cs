@@ -62,13 +62,23 @@ namespace RGB.NET.Devices.OpenRGB
                 {
                     var device = _openRgb.GetControllerData(i);
 
+                    //if the device doesn't have a direct mode, don't add it
+                    if (!device.Modes.Any(m => m.Name == "Direct"))
+                        continue;
+
                     IOpenRGBDevice rgbDevice = null;
                     switch (device.Type)
                     {
                         case OpenRGBDeviceType.Keyboard:
                             rgbDevice = new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device));
                             break;
-                            //TODO: other device types
+                        case OpenRGBDeviceType.Motherboard:
+                            rgbDevice = new OpenRGBMotherboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mainboard, device));
+                            break;
+                        case OpenRGBDeviceType.Mouse:
+                            rgbDevice = new OpenRGBMouseDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mouse, device));
+                            break;
+                        //TODO: other device types
                         default:
                             break;
                     }

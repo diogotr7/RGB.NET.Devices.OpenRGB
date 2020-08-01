@@ -140,7 +140,7 @@ namespace RGB.NET.Devices.OpenRGB
             { "Game Mode"             , LedId.Keyboard_WinLock},
             { "Caps Lock Indicator"   , LedId.Custom1},
             { "Scroll Lock Indicator" , LedId.Custom2},
-            { "Num Lock Indicator"    , LedId.Custom3},
+            { "Num Lock Indicator"    , LedId.Custom3}
         };
     }
 }
