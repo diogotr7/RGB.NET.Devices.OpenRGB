@@ -136,6 +136,11 @@ namespace RGB.NET.Devices.OpenRGB
             //{ "Key: G1"               , LedId.Keyboard_G1                      },
             //{ "Key: G2"               , LedId.Keyboard_G2                      },
             //{ "Key: G3"               , LedId.Keyboard_G3                      },
+            { "Lighting"              , LedId.Keyboard_Brightness},
+            { "Game Mode"             , LedId.Keyboard_WinLock},
+            { "Caps Lock Indicator"   , LedId.Custom1},
+            { "Scroll Lock Indicator" , LedId.Custom2},
+            { "Num Lock Indicator"    , LedId.Custom3},
         };
     }
 }
