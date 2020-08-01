@@ -28,7 +28,7 @@ namespace RGB.NET.Devices.OpenRGB
 
                             if (KeyboardLedMapping.Names.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
                             {
-                                InitializeLed(ledid, new Point(19 * column, 19 * row), new Size(19 * 19));
+                                InitializeLed(ledid, new Point(20 * column, 20 * row), new Size(19));
                             }
                         }
                     }
