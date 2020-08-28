@@ -1,5 +1,6 @@
 ﻿using OpenRGB.NET;
 using RGB.NET.Core;
+using RGB.NET.Devices.OpenRGB.Generic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,8 @@ namespace RGB.NET.Devices.OpenRGB
         private static OpenRGBDeviceProvider _instance;
 
         public static OpenRGBDeviceProvider Instance => _instance ?? new OpenRGBDeviceProvider();
+
+        public static string ClientName { get; set; } = "RGB.NET";
 
         public bool IsInitialized { get; private set; }
 
@@ -49,7 +52,7 @@ namespace RGB.NET.Devices.OpenRGB
             try
             {
                 UpdateTrigger?.Stop();
-                _openRgb = new OpenRGBClient(name: "RGB.NET");
+                _openRgb = new OpenRGBClient(name: ClientName);
                 _openRgb.Connect();
 
                 IList<IRGBDevice> devices = new List<IRGBDevice>();
@@ -69,14 +72,35 @@ namespace RGB.NET.Devices.OpenRGB
                         case OpenRGBDeviceType.Keyboard:
                             rgbDevice = new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device));
                             break;
-                        case OpenRGBDeviceType.Motherboard:
-                            rgbDevice = new OpenRGBMotherboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mainboard, device));
-                            break;
                         case OpenRGBDeviceType.Mouse:
-                            rgbDevice = new OpenRGBMouseDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mouse, device));
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mouse, device));
                             break;
-                        //TODO: other device types
+                        case OpenRGBDeviceType.Motherboard:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mainboard, device));
+                            break;
+                        case OpenRGBDeviceType.Dram:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.DRAM, device));
+                            break;
+                        case OpenRGBDeviceType.Gpu:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.GraphicsCard, device));
+                            break;
+                        case OpenRGBDeviceType.Cooler:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Cooler, device));
+                            break;
+                        case OpenRGBDeviceType.Ledstrip:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device));
+                            break;
+                        case OpenRGBDeviceType.Mousemat:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mousepad, device));
+                            break;
+                        case OpenRGBDeviceType.Headset:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Headset, device));
+                            break;
+                        case OpenRGBDeviceType.HeadsetStand:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.HeadsetStand, device));
+                            break;
                         default:
+                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Unknown, device));
                             break;
                     }
 

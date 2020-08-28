@@ -24,7 +24,7 @@ namespace RGB.NET.Devices.OpenRGB
                             if (index == uint.MaxValue)
                                 continue;
 
-                            if (KeyboardLedMapping.Names.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
+                            if (KeyboardLedMapping.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
                             {
                                 InitializeLed(ledid, new Point(20 * column, 20 * row), new Size(19));
                             }

@@ -5,7 +5,7 @@ namespace RGB.NET.Devices.OpenRGB
 {
     public static class KeyboardLedMapping
     {
-        public static readonly Dictionary<string, LedId> Names = new Dictionary<string, LedId>()
+        public static readonly Dictionary<string, LedId> Default = new Dictionary<string, LedId>()
         {
             { "Key: A"                , LedId.Keyboard_A                       },
             { "Key: B"                , LedId.Keyboard_B                       },
@@ -107,7 +107,7 @@ namespace RGB.NET.Devices.OpenRGB
             //{ "Key: Left Fn"          , LedId.Keyboard_LeftFn                  },
             //{ "Key: Right Fn"         , LedId.Keyboard_Fn_key                  },
             { "Key: \\ (ISO)"         , LedId.Keyboard_NonUsBackslash          },
-            { "Key: Context"          , LedId.Keyboard_Application             },
+            { "Key: Menu"             , LedId.Keyboard_Application             },
             { "Key: Left Control"     , LedId.Keyboard_LeftCtrl                },
             { "Key: Left Shift"       , LedId.Keyboard_LeftShift               },
             { "Key: Left Alt"         , LedId.Keyboard_LeftAlt                 },
