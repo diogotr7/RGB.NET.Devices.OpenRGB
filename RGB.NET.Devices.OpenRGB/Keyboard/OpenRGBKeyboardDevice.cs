@@ -9,6 +9,8 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected override void InitializeLayout()
         {
+            int y = 0;
+            LedId initial = LedId.Keyboard_Custom1;
             //keyboards should be Matrix zone types
             foreach (var zone in DeviceInfo.OpenRGBDevice.Zones)
             {
@@ -30,7 +32,20 @@ namespace RGB.NET.Devices.OpenRGB
                             }
                         }
                     }
+                    y += (int)(zone.MatrixMap.Height * 20);
                 }
+                else if (zone.Type == ZoneType.Linear)
+                {
+                    for (int i = 0; i < zone.LedCount; i++)
+                    {
+                        InitializeLed(initial++, new Point(i * 20, y), new Size(19));
+                    }
+                }
+                else if (zone.Type == ZoneType.Single)
+                {
+                    InitializeLed(initial++, new Point(0, y), new Size(19));
+                }
+                y += 20;
             }
             //TODO: layout?
         }

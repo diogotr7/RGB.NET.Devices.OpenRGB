@@ -45,8 +45,8 @@ namespace RGB.NET.Devices.OpenRGB
             LedId initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType);
 
             int y = 0;
-            var ledSize = new Size(10);
-            const int ledSpacing = 11;
+            var ledSize = new Size(19);
+            const int ledSpacing = 20;
 
             foreach (var zone in DeviceInfo.OpenRGBDevice.Zones)
             {
@@ -69,12 +69,13 @@ namespace RGB.NET.Devices.OpenRGB
                                 InitializeLed(initial++, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize);
                             }
                         }
+                        y += (int)(zone.MatrixMap.Height * ledSpacing);
                         break;
                 }
 
                 //we'll just set each zone in its own row for now,
                 //with each led for that zone being horizontally distributed
-                y += 20;
+                y += ledSpacing;
             }
         }
 

@@ -5,8 +5,7 @@ namespace RGB.NET.Devices.OpenRGB
 {
     public static class Helper
     {
-        public static LedId GetInitialLedIdForDeviceType(RGBDeviceType type) =>
-        type switch
+        public static LedId GetInitialLedIdForDeviceType(RGBDeviceType type) => type switch
         {
             RGBDeviceType.Mouse => LedId.Mouse1,
             RGBDeviceType.Headset => LedId.Headset1,
@@ -24,18 +23,22 @@ namespace RGB.NET.Devices.OpenRGB
             _ => LedId.Custom1
         };
 
-        public static LedId GetInitialLedIdForDeviceType(DeviceType type) =>
-        type switch
+        public static RGBDeviceType GetRgbNetDeviceType(DeviceType type) => type switch
         {
-            DeviceType.Mouse => LedId.Mouse1,
-            DeviceType.Headset => LedId.Headset1,
-            DeviceType.Mousemat => LedId.Mousepad1,
-            DeviceType.Motherboard => LedId.Mainboard1,
-            DeviceType.Gpu => LedId.GraphicsCard1,
-            DeviceType.Dram => LedId.DRAM1,
-            DeviceType.HeadsetStand => LedId.HeadsetStand1,
-            DeviceType.Cooler => LedId.Cooler1,
-            _ => LedId.Custom1
+            DeviceType.Motherboard => RGBDeviceType.Mainboard,
+            DeviceType.Dram => RGBDeviceType.DRAM,
+            DeviceType.Gpu => RGBDeviceType.GraphicsCard,
+            DeviceType.Cooler => RGBDeviceType.Cooler,
+            DeviceType.Ledstrip => RGBDeviceType.LedStripe,
+            DeviceType.Keyboard => RGBDeviceType.Keyboard,
+            DeviceType.Mouse => RGBDeviceType.Mouse,
+            DeviceType.Mousemat => RGBDeviceType.Mousepad,
+            DeviceType.Headset => RGBDeviceType.Headset,
+            DeviceType.HeadsetStand => RGBDeviceType.HeadsetStand,
+            _ => RGBDeviceType.Unknown
         };
+
+        public static LedId GetInitialLedIdForDeviceType(DeviceType type) =>
+            GetInitialLedIdForDeviceType(GetRgbNetDeviceType(type));
     }
 }

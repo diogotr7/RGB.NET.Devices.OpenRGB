@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using OpenRGBDeviceType = OpenRGB.NET.Enums.DeviceType;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -57,6 +56,7 @@ namespace RGB.NET.Devices.OpenRGB
 
                 IList<IRGBDevice> devices = new List<IRGBDevice>();
                 int deviceCount = _openRgb.GetControllerCount();
+                var modelCounter = new Dictionary<string, int>();
 
                 for (int i = 0; i < deviceCount; i++)
                 {
@@ -67,42 +67,13 @@ namespace RGB.NET.Devices.OpenRGB
                         continue;
 
                     IOpenRGBDevice rgbDevice = null;
-                    switch (device.Type)
+                    var type = Helper.GetRgbNetDeviceType(device.Type);
+
+                    rgbDevice = type switch
                     {
-                        case OpenRGBDeviceType.Keyboard:
-                            rgbDevice = new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device));
-                            break;
-                        case OpenRGBDeviceType.Mouse:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mouse, device));
-                            break;
-                        case OpenRGBDeviceType.Motherboard:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mainboard, device));
-                            break;
-                        case OpenRGBDeviceType.Dram:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.DRAM, device));
-                            break;
-                        case OpenRGBDeviceType.Gpu:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.GraphicsCard, device));
-                            break;
-                        case OpenRGBDeviceType.Cooler:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Cooler, device));
-                            break;
-                        case OpenRGBDeviceType.Ledstrip:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device));
-                            break;
-                        case OpenRGBDeviceType.Mousemat:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Mousepad, device));
-                            break;
-                        case OpenRGBDeviceType.Headset:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Headset, device));
-                            break;
-                        case OpenRGBDeviceType.HeadsetStand:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.HeadsetStand, device));
-                            break;
-                        default:
-                            rgbDevice = new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Unknown, device));
-                            break;
-                    }
+                        RGBDeviceType.Keyboard => new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device, modelCounter)),
+                        _ => new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter)),
+                    };
 
                     if ((rgbDevice != null) && loadFilter.HasFlag(rgbDevice.DeviceInfo.DeviceType))
                     {
