@@ -4,6 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>8.0</LangVersion>
 	<OutputPath>..\bin\</OutputPath>
+	<Platforms>x64</Platforms>
+	<GenerateDependencyFile>False</GenerateDependencyFile>
   </PropertyGroup>
 
   <ItemGroup>
