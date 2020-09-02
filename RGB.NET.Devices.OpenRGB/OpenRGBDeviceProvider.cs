@@ -112,7 +112,7 @@ namespace RGB.NET.Devices.OpenRGB
                     var initial = LedId.LedStripe1;
                     foreach (var zone in device.Zones)
                     {
-                        yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device, modelCounter), initial, zone.LedCount);
+                        yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device, modelCounter), initial, zone);
                         initial += (int)zone.LedCount;
                     }
                     break;

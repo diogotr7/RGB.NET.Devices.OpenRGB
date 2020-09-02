@@ -31,26 +31,27 @@ namespace RGB.NET.Devices.OpenRGB
             this._openRGB = client;
             this._device = device;
             this._colors = Enumerable.Range(0, device.Colors.Length).Select(_ => new OpenRGBColor()).ToArray();
+
             var map = new LedId[device.Colors.Length];
-
-            if (_device.Type == DeviceType.Keyboard)
+            LedId initial = Helper.GetInitialLedIdForDeviceType(device.Type);
+            uint zoneLedCount = 0;
+            foreach (var zone in _device.Zones)
             {
-                LedId initial = LedId.Keyboard_Custom1;
-                uint zoneLedCount = 0;
-                foreach (var zone in _device.Zones)
+                if (zone.Type == ZoneType.Matrix)
                 {
-                    if (zone.Type == ZoneType.Matrix)
+                    for (int row = 0; row < zone.MatrixMap.Height; row++)
                     {
-                        for (int row = 0; row < zone.MatrixMap.Height; row++)
+                        for (int column = 0; column < zone.MatrixMap.Width; column++)
                         {
-                            for (int column = 0; column < zone.MatrixMap.Width; column++)
+                            var index = zone.MatrixMap.Matrix[row, column];
+
+                            //will be max value if the position does not have an associated key
+                            if (index == uint.MaxValue)
+                                continue;
+
+                            //if the device is a keyboard we want to use the names of the keys to map them
+                            if (_device.Type == DeviceType.Keyboard)
                             {
-                                var index = zone.MatrixMap.Matrix[row, column];
-
-                                //will be max value if the position does not have an associated key
-                                if (index == uint.MaxValue)
-                                    continue;
-
                                 if (KeyboardLedMapping.Default.TryGetValue(_device.Leds[index].Name, out var ledid))
                                 {
                                     map[(int)index] = ledid;
@@ -60,30 +61,22 @@ namespace RGB.NET.Devices.OpenRGB
                                     map[(int)index] = LedId.Invalid;
                                 }
                             }
+                            else
+                            {
+                                map[(int)index] = initial++;
+                            }
                         }
                     }
-                    else if (zone.Type == ZoneType.Linear)
-                    {
-                        for (var j = 0; j < zone.LedCount; j++)
-                        {
-                            map[(int)(zoneLedCount + j)] = initial++;
-                        }
-                    }
-                    else if (zone.Type == ZoneType.Single)
-                    {
-                        map[(int)zoneLedCount] = initial++;
-                    }
-
-                    zoneLedCount += zone.LedCount;
                 }
-            }
-            else
-            {
-                LedId initial = Helper.GetInitialLedIdForDeviceType(device.Type);
-                for (int i = 0; i < _device.Leds.Length; i++)
+                else
                 {
-                    map[(int)i] = initial++;
+                    for (var j = 0; j < zone.LedCount; j++)
+                    {
+                        map[(int)(zoneLedCount + j)] = initial++;
+                    }
                 }
+
+                zoneLedCount += zone.LedCount;
             }
 
             Mapping = Array.AsReadOnly(map);

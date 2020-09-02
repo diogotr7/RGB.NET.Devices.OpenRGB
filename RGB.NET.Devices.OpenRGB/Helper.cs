@@ -20,6 +20,7 @@ namespace RGB.NET.Devices.OpenRGB
             RGBDeviceType.Fan => LedId.Fan1,
             RGBDeviceType.Speaker => LedId.Speaker1,
             RGBDeviceType.Cooler => LedId.Cooler1,
+            RGBDeviceType.Keyboard => LedId.Keyboard_Custom1,
             _ => LedId.Custom1
         };
 
