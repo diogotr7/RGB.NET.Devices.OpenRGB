@@ -49,17 +49,9 @@ namespace RGB.NET.Devices.OpenRGB
                             if (index == uint.MaxValue)
                                 continue;
 
-                            //if the device is a keyboard we want to use the names of the keys to map them
-                            if (_device.Type == DeviceType.Keyboard)
+                            if (KeyboardLedMapping.Default.TryGetValue(_device.Leds[index].Name, out var ledid))
                             {
-                                if (KeyboardLedMapping.Default.TryGetValue(_device.Leds[index].Name, out var ledid))
-                                {
-                                    map[(int)index] = ledid;
-                                }
-                                else
-                                {
-                                    map[(int)index] = LedId.Invalid;
-                                }
+                                map[(int)index] = ledid;
                             }
                             else
                             {

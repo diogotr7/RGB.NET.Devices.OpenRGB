@@ -53,8 +53,6 @@ namespace RGB.NET.Devices.OpenRGB
                 switch (zone.Type)
                 {
                     case ZoneType.Single:
-                        InitializeLed(initial++, new Point(0, y), ledSize);
-                        break;
                     case ZoneType.Linear:
                         for (int i = 0; i < zone.LedCount; i++)
                         {
@@ -66,7 +64,20 @@ namespace RGB.NET.Devices.OpenRGB
                         {
                             for (int column = 0; column < zone.MatrixMap.Width; column++)
                             {
-                                InitializeLed(initial++, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize);
+                                var index = zone.MatrixMap.Matrix[row, column];
+
+                                //will be max value if the position does not have an associated key
+                                if (index == uint.MaxValue)
+                                    continue;
+
+                                if (KeyboardLedMapping.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
+                                {
+                                    InitializeLed(ledid, new Point(ledSpacing * column, ledSpacing * row), ledSize);
+                                }
+                                else
+                                {
+                                    InitializeLed(initial++, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize);
+                                }
                             }
                         }
                         y += (int)(zone.MatrixMap.Height * ledSpacing);

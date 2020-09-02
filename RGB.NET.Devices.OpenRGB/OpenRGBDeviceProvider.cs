@@ -106,22 +106,18 @@ namespace RGB.NET.Devices.OpenRGB
 
         private static IEnumerable<IOpenRGBDevice> GetRGBDevice( int i, Device device, Dictionary<string, int> modelCounter)
         {
-            switch (device.Type)
+            if (device.Type == DeviceType.Ledstrip)
             {
-                case DeviceType.Ledstrip:
-                    var initial = LedId.LedStripe1;
-                    foreach (var zone in device.Zones)
-                    {
-                        yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device, modelCounter), initial, zone);
-                        initial += (int)zone.LedCount;
-                    }
-                    break;
-                case DeviceType.Keyboard:
-                    yield return new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device, modelCounter));
-                    break;
-                default:
-                    yield return new OpenRGBGenericDevice(new OpenRGBDeviceInfo(i, Helper.GetRgbNetDeviceType(device.Type), device, modelCounter));
-                    break;
+                var initial = LedId.LedStripe1;
+                foreach (var zone in device.Zones)
+                {
+                    yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device, modelCounter), initial, zone);
+                    initial += (int)zone.LedCount;
+                }
+            }
+            else
+            {
+                yield return new OpenRGBGenericDevice(new OpenRGBDeviceInfo(i, Helper.GetRgbNetDeviceType(device.Type), device, modelCounter));
             }
         }
 

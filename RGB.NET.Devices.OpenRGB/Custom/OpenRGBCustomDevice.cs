@@ -17,13 +17,16 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected override void InitializeLayout()
         {
+            var ledSize = new Size(19);
+            const int ledSpacing = 20;
+
             switch (_zone.Type)
             {
                 case ZoneType.Single:
                 case ZoneType.Linear:
                     for (int i = 0; i < _zone.LedCount; i++)
                     {
-                        InitializeLed(_initial++, new Point(20 * i, 0), new Size(19));
+                        InitializeLed(_initial++, new Point(ledSpacing * i, 0), ledSize);
                     }
                     break;
                 case ZoneType.Matrix:
@@ -31,7 +34,7 @@ namespace RGB.NET.Devices.OpenRGB
                     {
                         for (int column = 0; column < _zone.MatrixMap.Width; column++)
                         {
-                            InitializeLed(_initial++, new Point(20 * column,  (20 * row)), new Size(19));
+                            InitializeLed(_initial++, new Point(ledSpacing * column,  ledSpacing * row), ledSize);
                         }
                     }
                     break;
