@@ -1,4 +1,6 @@
 ﻿using OpenRGB.NET;
+using OpenRGB.NET.Enums;
+using OpenRGB.NET.Models;
 using RGB.NET.Core;
 using RGB.NET.Devices.OpenRGB.Generic;
 using System;
@@ -66,19 +68,17 @@ namespace RGB.NET.Devices.OpenRGB
                     if (!device.Modes.Any(m => m.Name == "Direct"))
                         continue;
 
-                    IOpenRGBDevice rgbDevice = null;
-                    var type = Helper.GetRgbNetDeviceType(device.Type);
+                    if (!loadFilter.HasFlag(Helper.GetRgbNetDeviceType(device.Type)))
+                        continue;
 
-                    rgbDevice = type switch
+                    OpenRGBUpdateQueue updateQueue = null;
+                    foreach(var dev in GetRGBDevice(i, device, modelCounter))
                     {
-                        RGBDeviceType.Keyboard => new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device, modelCounter)),
-                        _ => new GenericOpenRGBDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter)),
-                    };
+                        if (updateQueue is null)
+                            updateQueue = new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb, device);
 
-                    if ((rgbDevice != null) && loadFilter.HasFlag(rgbDevice.DeviceInfo.DeviceType))
-                    {
-                        rgbDevice.Initialize(new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb, device));
-                        devices.Add(rgbDevice);
+                        dev.Initialize(updateQueue);
+                        devices.Add(dev);
                     }
                 }
 
@@ -102,6 +102,27 @@ namespace RGB.NET.Devices.OpenRGB
         public void Dispose()
         {
             _openRgb?.Dispose();
+        }
+
+        private static IEnumerable<IOpenRGBDevice> GetRGBDevice( int i, Device device, Dictionary<string, int> modelCounter)
+        {
+            switch (device.Type)
+            {
+                case DeviceType.Ledstrip:
+                    var initial = LedId.LedStripe1;
+                    foreach (var zone in device.Zones)
+                    {
+                        yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device, modelCounter), initial, zone.LedCount);
+                        initial += (int)zone.LedCount;
+                    }
+                    break;
+                case DeviceType.Keyboard:
+                    yield return new OpenRGBKeyboardDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.Keyboard, device, modelCounter));
+                    break;
+                default:
+                    yield return new OpenRGBGenericDevice(new OpenRGBDeviceInfo(i, Helper.GetRgbNetDeviceType(device.Type), device, modelCounter));
+                    break;
+            }
         }
 
         #endregion
