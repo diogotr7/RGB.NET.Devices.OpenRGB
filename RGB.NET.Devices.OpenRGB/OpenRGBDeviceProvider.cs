@@ -18,7 +18,11 @@ namespace RGB.NET.Devices.OpenRGB
 
         public static OpenRGBDeviceProvider Instance => _instance ?? new OpenRGBDeviceProvider();
 
-        public static string ClientName { get; set; } = "RGB.NET";
+        public string ClientName { get; set; } = "RGB.NET";
+
+        public string IpAddress { get; set; } = "127.0.0.1";
+
+        public int Port { get; set; } = 6742;
 
         public bool IsInitialized { get; private set; }
 
@@ -53,7 +57,7 @@ namespace RGB.NET.Devices.OpenRGB
             try
             {
                 UpdateTrigger?.Stop();
-                _openRgb = new OpenRGBClient(name: ClientName);
+                _openRgb = new OpenRGBClient(ip: IpAddress, port: Port, name: ClientName);
                 _openRgb.Connect();
 
                 IList<IRGBDevice> devices = new List<IRGBDevice>();
@@ -106,18 +110,19 @@ namespace RGB.NET.Devices.OpenRGB
 
         private static IEnumerable<IOpenRGBDevice> GetRGBDevice( int i, Device device, Dictionary<string, int> modelCounter)
         {
-            if (device.Type == DeviceType.Ledstrip)
+            var type = Helper.GetRgbNetDeviceType(device.Type);
+            if (type == RGBDeviceType.LedStripe)
             {
                 var initial = LedId.LedStripe1;
                 foreach (var zone in device.Zones)
                 {
-                    yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, RGBDeviceType.LedStripe, device, modelCounter), initial, zone);
+                    yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter), initial, zone);
                     initial += (int)zone.LedCount;
                 }
             }
             else
             {
-                yield return new OpenRGBGenericDevice(new OpenRGBDeviceInfo(i, Helper.GetRgbNetDeviceType(device.Type), device, modelCounter));
+                yield return new OpenRGBGenericDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter));
             }
         }
 

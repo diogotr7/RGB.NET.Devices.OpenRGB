@@ -50,38 +50,36 @@ namespace RGB.NET.Devices.OpenRGB
 
             foreach (var zone in DeviceInfo.OpenRGBDevice.Zones)
             {
-                switch (zone.Type)
+                if (zone.Type == ZoneType.Matrix)
                 {
-                    case ZoneType.Single:
-                    case ZoneType.Linear:
-                        for (int i = 0; i < zone.LedCount; i++)
+                    for (int row = 0; row < zone.MatrixMap.Height; row++)
+                    {
+                        for (int column = 0; column < zone.MatrixMap.Width; column++)
                         {
-                            InitializeLed(initial++, new Point(i * ledSpacing, y), ledSize);
-                        }
-                        break;
-                    case ZoneType.Matrix:
-                        for (int row = 0; row < zone.MatrixMap.Height; row++)
-                        {
-                            for (int column = 0; column < zone.MatrixMap.Width; column++)
+                            var index = zone.MatrixMap.Matrix[row, column];
+
+                            //will be max value if the position does not have an associated key
+                            if (index == uint.MaxValue)
+                                continue;
+
+                            if (KeyboardLedMapping.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
                             {
-                                var index = zone.MatrixMap.Matrix[row, column];
-
-                                //will be max value if the position does not have an associated key
-                                if (index == uint.MaxValue)
-                                    continue;
-
-                                if (KeyboardLedMapping.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
-                                {
-                                    InitializeLed(ledid, new Point(ledSpacing * column, ledSpacing * row), ledSize);
-                                }
-                                else
-                                {
-                                    InitializeLed(initial++, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize);
-                                }
+                                InitializeLed(ledid, new Point(ledSpacing * column, ledSpacing * row), ledSize);
+                            }
+                            else
+                            {
+                                InitializeLed(initial++, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize);
                             }
                         }
-                        y += (int)(zone.MatrixMap.Height * ledSpacing);
-                        break;
+                    }
+                    y += (int)(zone.MatrixMap.Height * ledSpacing);
+                }
+                else
+                {
+                    for (int i = 0; i < zone.LedCount; i++)
+                    {
+                        InitializeLed(initial++, new Point(i * ledSpacing, y), ledSize);
+                    }
                 }
 
                 //we'll just set each zone in its own row for now,

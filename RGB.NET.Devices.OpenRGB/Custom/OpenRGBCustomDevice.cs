@@ -20,24 +20,22 @@ namespace RGB.NET.Devices.OpenRGB
             var ledSize = new Size(19);
             const int ledSpacing = 20;
 
-            switch (_zone.Type)
+            if (_zone.Type == ZoneType.Matrix)
             {
-                case ZoneType.Single:
-                case ZoneType.Linear:
-                    for (int i = 0; i < _zone.LedCount; i++)
+                for (int row = 0; row < _zone.MatrixMap.Height; row++)
+                {
+                    for (int column = 0; column < _zone.MatrixMap.Width; column++)
                     {
-                        InitializeLed(_initial++, new Point(ledSpacing * i, 0), ledSize);
+                        InitializeLed(_initial++, new Point(ledSpacing * column, ledSpacing * row), ledSize);
                     }
-                    break;
-                case ZoneType.Matrix:
-                    for (int row = 0; row < _zone.MatrixMap.Height; row++)
-                    {
-                        for (int column = 0; column < _zone.MatrixMap.Width; column++)
-                        {
-                            InitializeLed(_initial++, new Point(ledSpacing * column,  ledSpacing * row), ledSize);
-                        }
-                    }
-                    break;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _zone.LedCount; i++)
+                {
+                    InitializeLed(_initial++, new Point(ledSpacing * i, 0), ledSize);
+                }
             }
         }
     }
