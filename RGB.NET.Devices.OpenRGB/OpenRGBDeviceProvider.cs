@@ -91,10 +91,8 @@ namespace RGB.NET.Devices.OpenRGB
                 Devices = new ReadOnlyCollection<IRGBDevice>(devices);
                 IsInitialized = true;
             }
-            catch
+            catch when (!throwExceptions)
             {
-                if (throwExceptions)
-                    throw;
             }
 
             return true;
