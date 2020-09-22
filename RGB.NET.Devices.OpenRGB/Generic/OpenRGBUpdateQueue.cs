@@ -18,8 +18,6 @@ namespace RGB.NET.Devices.OpenRGB
         private readonly OpenRGBClient _openRGB;
         private readonly OpenRGBDevice _device;
         private readonly OpenRGBColor[] _colors;
-
-        private readonly ReadOnlyCollection<LedId> Mapping;
         #endregion
 
         #region Constructors
@@ -27,51 +25,12 @@ namespace RGB.NET.Devices.OpenRGB
         public OpenRGBUpdateQueue(IDeviceUpdateTrigger updateTrigger, int deviceid, OpenRGBClient client, OpenRGBDevice device)
             : base(updateTrigger)
         {
-            this._deviceid = deviceid;
-            this._openRGB = client;
-            this._device = device;
-            this._colors = Enumerable.Range(0, device.Colors.Length).Select(_ => new OpenRGBColor()).ToArray();
-
-            var map = new LedId[device.Colors.Length];
-            LedId initial = Helper.GetInitialLedIdForDeviceType(device.Type);
-            uint zoneLedCount = 0;
-            foreach (var zone in _device.Zones)
-            {
-                if (zone.Type == ZoneType.Matrix)
-                {
-                    for (int row = 0; row < zone.MatrixMap.Height; row++)
-                    {
-                        for (int column = 0; column < zone.MatrixMap.Width; column++)
-                        {
-                            var index = zone.MatrixMap.Matrix[row, column];
-
-                            //will be max value if the position does not have an associated key
-                            if (index == uint.MaxValue)
-                                continue;
-
-                            if (KeyboardLedMapping.Default.TryGetValue(_device.Leds[index].Name, out var ledid))
-                            {
-                                map[(int)index] = ledid;
-                            }
-                            else
-                            {
-                                map[(int)index] = initial++;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (var j = 0; j < zone.LedCount; j++)
-                    {
-                        map[(int)(zoneLedCount + j)] = initial++;
-                    }
-                }
-
-                zoneLedCount += zone.LedCount;
-            }
-
-            Mapping = Array.AsReadOnly(map);
+            _deviceid = deviceid;
+            _openRGB = client;
+            _device = device;
+            _colors = Enumerable.Range(0, _device.Colors.Length)
+                                .Select(_ => new OpenRGBColor())
+                                .ToArray();
         }
 
         #endregion
@@ -80,12 +39,9 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected override void Update(Dictionary<object, Color> dataSet)
         {
-            for (int i = 0; i < _device.Leds.Length; i++)
+            foreach(var data in dataSet)
             {
-                if (dataSet.TryGetValue(Mapping[i], out var clr))
-                {
-                    _colors[i] = new OpenRGBColor(clr.GetR(), clr.GetG(), clr.GetB());
-                }
+                _colors[(int)data.Key] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
             }
 
             _openRGB.UpdateLeds(_deviceid, _colors);

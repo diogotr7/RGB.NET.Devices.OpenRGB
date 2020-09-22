@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RGB.NET.Devices.OpenRGB
 {
-    public static class KeyboardLedMapping
+    public static class StandardKeyNames
     {
         public static readonly Dictionary<string, LedId> Default = new Dictionary<string, LedId>()
         {
@@ -43,7 +43,7 @@ namespace RGB.NET.Devices.OpenRGB
             { "Key: 8"                , LedId.Keyboard_8                       },
             { "Key: 9"                , LedId.Keyboard_9                       },
             { "Key: 0"                , LedId.Keyboard_0                       },
-            { "Key: Enter"            , LedId.Keyboard_Enter                   },//TODO: Fix
+            //{ "Key: Enter"            , LedId.Keyboard_Enter                   },//TODO: Fix
             { "Key: Enter (ISO)"      , LedId.Keyboard_Enter                   },
             { "Key: Escape"           , LedId.Keyboard_Escape                  },
             { "Key: Backspace"        , LedId.Keyboard_Backspace               },

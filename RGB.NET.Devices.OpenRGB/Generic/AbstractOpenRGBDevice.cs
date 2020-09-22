@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace RGB.NET.Devices.OpenRGB
 {
-    public abstract class OpenRGBRGBDevice<TDeviceInfo> : AbstractRGBDevice<TDeviceInfo>, IOpenRGBDevice
+    public abstract class AbstractOpenRGBDevice<TDeviceInfo> : AbstractRGBDevice<TDeviceInfo>, IOpenRGBDevice
         where TDeviceInfo : OpenRGBDeviceInfo
     {
         #region Properties & Fields
@@ -14,11 +14,13 @@ namespace RGB.NET.Devices.OpenRGB
 
         private OpenRGBUpdateQueue UpdateQueue { get; set; }
 
+        protected readonly Dictionary<LedId, int> _indexMapping = new Dictionary<LedId, int>();
+
         #endregion
 
         #region Constructors
 
-        protected OpenRGBRGBDevice(TDeviceInfo info)
+        protected AbstractOpenRGBDevice(TDeviceInfo info)
         {
             DeviceInfo = info;
         }
@@ -44,6 +46,13 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected override void UpdateLeds(IEnumerable<Led> ledsToUpdate) => UpdateQueue.SetData(ledsToUpdate.Where(x => x.Color.A > 0));
 
+        protected override object CreateLedCustomData(LedId ledId)
+        {
+            if (!_indexMapping.TryGetValue(ledId, out int index))
+                return null;
+
+            return index;
+        }
         #endregion
     }
 }

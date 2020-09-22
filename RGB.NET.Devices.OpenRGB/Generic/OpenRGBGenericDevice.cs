@@ -3,7 +3,7 @@ using RGB.NET.Core;
 
 namespace RGB.NET.Devices.OpenRGB.Generic
 {
-    public class OpenRGBGenericDevice : OpenRGBRGBDevice<OpenRGBDeviceInfo>
+    public class OpenRGBGenericDevice : AbstractOpenRGBDevice<OpenRGBDeviceInfo>
     {
         public OpenRGBGenericDevice(OpenRGBDeviceInfo info) : base(info) { }
 
@@ -13,6 +13,7 @@ namespace RGB.NET.Devices.OpenRGB.Generic
 
             int y = 0;
             var ledSize = new Size(19);
+            uint totalleds = 0;
             const int ledSpacing = 20;
 
             foreach (var zone in DeviceInfo.OpenRGBDevice.Zones)
@@ -29,14 +30,14 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                             if (index == uint.MaxValue)
                                 continue;
 
-                            if (KeyboardLedMapping.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var ledid))
-                            {
-                                InitializeLed(ledid, new Point(ledSpacing * column, ledSpacing * row), ledSize);
-                            }
-                            else
-                            {
-                                InitializeLed(initial++, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize);
-                            }
+                            var ledId = StandardKeyNames.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var l)
+                                ? l
+                                : initial++;
+
+                            if (!_indexMapping.ContainsKey(ledId))
+                                _indexMapping.Add(ledId, (int)index);
+
+                            InitializeLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize);
                         }
                     }
                     y += (int)(zone.MatrixMap.Height * ledSpacing);
@@ -45,13 +46,19 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                 {
                     for (int i = 0; i < zone.LedCount; i++)
                     {
-                        InitializeLed(initial++, new Point(i * ledSpacing, y), ledSize);
+                        var ledId = initial++;
+
+                        if (!_indexMapping.ContainsKey(ledId))
+                            _indexMapping.Add(ledId, (int)(totalleds + i));
+
+                        InitializeLed(ledId, new Point(i * ledSpacing, y), ledSize);
                     }
                 }
 
                 //we'll just set each zone in its own row for now,
                 //with each led for that zone being horizontally distributed
                 y += ledSpacing;
+                totalleds += zone.LedCount;
             }
         }
     }

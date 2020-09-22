@@ -76,7 +76,7 @@ namespace RGB.NET.Devices.OpenRGB
                         continue;
 
                     OpenRGBUpdateQueue updateQueue = null;
-                    foreach(var dev in GetRGBDevice(i, device, modelCounter))
+                    foreach (var dev in GetRGBDevice(i, device, modelCounter))
                     {
                         if (updateQueue is null)
                             updateQueue = new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb, device);
@@ -106,16 +106,18 @@ namespace RGB.NET.Devices.OpenRGB
             _openRgb?.Dispose();
         }
 
-        private static IEnumerable<IOpenRGBDevice> GetRGBDevice( int i, Device device, Dictionary<string, int> modelCounter)
+        private static IEnumerable<IOpenRGBDevice> GetRGBDevice(int i, Device device, Dictionary<string, int> modelCounter)
         {
             var type = Helper.GetRgbNetDeviceType(device.Type);
+            var totalLedCount = 0;
+
+            //should probably make this an option
             if (type == RGBDeviceType.LedStripe)
             {
-                var initial = LedId.LedStripe1;
                 foreach (var zone in device.Zones)
                 {
-                    yield return new OpenRGBCustomDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter), initial, zone);
-                    initial += (int)zone.LedCount;
+                    yield return new OpenRGBZoneDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter), totalLedCount, zone);
+                    totalLedCount += (int)zone.LedCount;
                 }
             }
             else
