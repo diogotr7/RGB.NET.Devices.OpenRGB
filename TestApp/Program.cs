@@ -1,20 +1,23 @@
 ﻿using System;
+using RGB.NET.Devices.OpenRGB;
+using RGB.NET.Core;
 
 namespace TestApp
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
-            var s = RGB.NET.Core.RGBSurface.Instance;
+            var s = RGBSurface.Instance;
 
-            s.LoadDevices(RGB.NET.Devices.OpenRGB.OpenRGBDeviceProvider.Instance, throwExceptions: true);
+            OpenRGBDeviceProvider.Instance.DeviceDefinitions.Add(new OpenRGBServerDefinition { ClientName = "TestProgram", Ip = "127.0.0.1", Port = 6742 });
+            s.LoadDevices(OpenRGBDeviceProvider.Instance, throwExceptions: true);
 
             foreach (var d in s.Devices)
             {
                 foreach (var led in d)
                 {
-                    led.Color = new RGB.NET.Core.Color(255, 255, 0);
+                    led.Color = new Color(255, 0, 0);
                 }
             }
 

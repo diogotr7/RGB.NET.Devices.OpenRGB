@@ -18,21 +18,15 @@ namespace RGB.NET.Devices.OpenRGB
 
         public static OpenRGBDeviceProvider Instance => _instance ?? new OpenRGBDeviceProvider();
 
-        public string ClientName { get; set; } = "RGB.NET";
-
-        public string IpAddress { get; set; } = "127.0.0.1";
-
-        public int Port { get; set; } = 6742;
-
         public bool IsInitialized { get; private set; }
 
         public bool HasExclusiveAccess => false;
 
         public IEnumerable<IRGBDevice> Devices { get; private set; }
 
-        public DeviceUpdateTrigger UpdateTrigger { get; }
+        public List<OpenRGBServerDefinition> DeviceDefinitions { get; } = new List<OpenRGBServerDefinition>();
 
-        private OpenRGBClient _openRgb;
+        public DeviceUpdateTrigger UpdateTrigger { get; }
 
         #endregion
 
@@ -57,32 +51,44 @@ namespace RGB.NET.Devices.OpenRGB
             try
             {
                 UpdateTrigger?.Stop();
-                _openRgb = new OpenRGBClient(ip: IpAddress, port: Port, name: ClientName);
-                _openRgb.Connect();
 
                 IList<IRGBDevice> devices = new List<IRGBDevice>();
-                int deviceCount = _openRgb.GetControllerCount();
+
                 var modelCounter = new Dictionary<string, int>();
 
-                for (int i = 0; i < deviceCount; i++)
+                foreach (var deviceDefinition in DeviceDefinitions)
                 {
-                    var device = _openRgb.GetControllerData(i);
-
-                    //if the device doesn't have a direct mode, don't add it
-                    if (!device.Modes.Any(m => m.Name == "Direct"))
-                        continue;
-
-                    if (!loadFilter.HasFlag(Helper.GetRgbNetDeviceType(device.Type)))
-                        continue;
-
-                    OpenRGBUpdateQueue updateQueue = null;
-                    foreach (var dev in GetRGBDevice(i, device, modelCounter))
+                    try
                     {
-                        if (updateQueue is null)
-                            updateQueue = new OpenRGBUpdateQueue(UpdateTrigger, i, _openRgb, device);
+                        var openRgb = new OpenRGBClient(ip: deviceDefinition.Ip, port: deviceDefinition.Port, name: deviceDefinition.ClientName, autoconnect: true);
 
-                        dev.Initialize(updateQueue);
-                        devices.Add(dev);
+                        int deviceCount = openRgb.GetControllerCount();
+
+                        for (int i = 0; i < deviceCount; i++)
+                        {
+                            var device = openRgb.GetControllerData(i);
+
+                            //if the device doesn't have a direct mode, don't add it
+                            if (!device.Modes.Any(m => m.Name == "Direct"))
+                                continue;
+
+                            if (!loadFilter.HasFlag(Helper.GetRgbNetDeviceType(device.Type)))
+                                continue;
+
+                            OpenRGBUpdateQueue updateQueue = null;
+                            foreach (var dev in GetRGBDevice(i, device, modelCounter))
+                            {
+                                if (updateQueue is null)
+                                    updateQueue = new OpenRGBUpdateQueue(UpdateTrigger, i, openRgb, device);
+
+                                dev.Initialize(updateQueue);
+                                devices.Add(dev);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        //we'll always catch this in case one of the connections fails and the others connect properly.
                     }
                 }
 
@@ -103,7 +109,8 @@ namespace RGB.NET.Devices.OpenRGB
 
         public void Dispose()
         {
-            _openRgb?.Dispose();
+            try { UpdateTrigger?.Dispose(); }
+            catch { /* at least we tried */ }
         }
 
         private static IEnumerable<IOpenRGBDevice> GetRGBDevice(int i, Device device, Dictionary<string, int> modelCounter)
