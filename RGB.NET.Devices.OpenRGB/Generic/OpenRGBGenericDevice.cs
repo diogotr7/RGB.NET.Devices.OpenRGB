@@ -60,6 +60,9 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                 y += ledSpacing;
                 totalleds += zone.LedCount;
             }
+
+            string model = DeviceInfo.Model.Replace(" ", string.Empty).ToUpper();
+            ApplyLayoutFromFile(PathHelper.GetAbsolutePath(this, @"Layouts\OpenRGB\", $"{model}.xml"), null);
         }
     }
 }

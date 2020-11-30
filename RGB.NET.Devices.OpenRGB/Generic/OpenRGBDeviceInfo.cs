@@ -8,9 +8,6 @@ namespace RGB.NET.Devices.OpenRGB
     public class OpenRGBDeviceInfo : IRGBDeviceInfo
     {
         #region Properties & Fields
-
-        public int OpenRGBDeviceIndex { get; }
-
         public RGBDeviceType DeviceType { get; }
 
         public string DeviceName { get; }
@@ -26,6 +23,8 @@ namespace RGB.NET.Devices.OpenRGB
         public RGBDeviceLighting Lighting => RGBDeviceLighting.Key;
 
         public OpenRGBDevice OpenRGBDevice { get; }
+
+        public int OpenRGBDeviceIndex { get; }
         #endregion 
 
         #region Constructors

@@ -56,6 +56,9 @@ namespace RGB.NET.Devices.OpenRGB
                     InitializeLed(ledId, new Point(ledSpacing * i, 0), ledSize);
                 }
             }
+
+            string model = DeviceInfo.Model.Replace(" ", string.Empty).ToUpper();
+            ApplyLayoutFromFile(PathHelper.GetAbsolutePath(this, @"Layouts\OpenRGB\", $"{model}.xml"), null);
         }
     }
 }
