@@ -1,6 +1,7 @@
 ﻿using OpenRGB.NET.Enums;
 using RGB.NET.Core;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace RGB.NET.Devices.OpenRGB
@@ -52,6 +53,12 @@ namespace RGB.NET.Devices.OpenRGB
                 return null;
 
             return index;
+        }
+
+        protected void LoadLayout()
+        {
+            string model = DeviceInfo.Model.Replace(" ", string.Empty).ToUpper();
+            ApplyLayoutFromFile(PathHelper.GetAbsolutePath(this, Path.Combine("Layouts", DeviceInfo.Manufacturer), $"{model}.xml"), null);
         }
         #endregion
     }

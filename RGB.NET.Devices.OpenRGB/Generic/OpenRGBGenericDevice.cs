@@ -1,5 +1,6 @@
 ﻿using OpenRGB.NET.Enums;
 using RGB.NET.Core;
+using System.IO;
 
 namespace RGB.NET.Devices.OpenRGB.Generic
 {
@@ -61,8 +62,7 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                 totalleds += zone.LedCount;
             }
 
-            string model = DeviceInfo.Model.Replace(" ", string.Empty).ToUpper();
-            ApplyLayoutFromFile(PathHelper.GetAbsolutePath(this, @"Layouts\OpenRGB\", $"{model}.xml"), null);
+            LoadLayout();
         }
     }
 }
