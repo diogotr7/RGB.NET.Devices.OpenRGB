@@ -12,9 +12,9 @@ namespace RGB.NET.Devices.OpenRGB
 
         public string DeviceName { get; }
 
-        public string Manufacturer => "OpenRGB";
+        public string Manufacturer { get; }
 
-        public string Model => OpenRGBDevice.Name;
+        public string Model { get; }
 
         public Uri Image { get; set; }
 
@@ -31,11 +31,22 @@ namespace RGB.NET.Devices.OpenRGB
 
         internal OpenRGBDeviceInfo(int deviceIndex, RGBDeviceType deviceType, OpenRGBDevice device, Dictionary<string, int> modelCounter)
         {
-            this.OpenRGBDeviceIndex = deviceIndex;
-            this.DeviceType = deviceType;
-            this.OpenRGBDevice = device;
+            OpenRGBDeviceIndex = deviceIndex;
+            DeviceType = deviceType;
+            OpenRGBDevice = device;
 
-            this.DeviceName = GetUniqueModelName(modelCounter);
+            if (!string.IsNullOrEmpty(OpenRGBDevice.Vendor))
+            {
+                Manufacturer = OpenRGBDevice.Vendor;
+                Model = OpenRGBDevice.Name.Replace(OpenRGBDevice.Vendor, "").Trim();
+            }
+            else
+            {
+                Manufacturer = "OpenRGB";
+                Model = OpenRGBDevice.Name;
+            }
+
+            DeviceName = GetUniqueModelName(modelCounter);
         }
 
         #endregion
