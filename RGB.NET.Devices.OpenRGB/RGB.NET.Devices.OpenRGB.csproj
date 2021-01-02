@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>8.0</LangVersion>
-	<OutputPath>..\bin\</OutputPath>
-	<Platforms>x64</Platforms>
-	<GenerateDependencyFile>False</GenerateDependencyFile>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\bin\</OutputPath>
+    <Platforms>x64</Platforms>
+    <GenerateDependencyFile>False</GenerateDependencyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Reference Include="RGB.NET.Core">
-      <HintPath>..\..\RGB.NET\bin\netstandard2.0\RGB.NET.Core.dll</HintPath>
+      <HintPath>..\..\RGB.NET\bin\net5.0\RGB.NET.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
 
