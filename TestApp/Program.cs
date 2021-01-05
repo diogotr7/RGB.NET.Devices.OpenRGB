@@ -10,19 +10,28 @@ namespace TestApp
         {
             var s = RGBSurface.Instance;
 
-            OpenRGBDeviceProvider.Instance.DeviceDefinitions.Add(new OpenRGBServerDefinition { ClientName = "TestProgram", Ip = "127.0.0.1", Port = 6742 });
-            s.LoadDevices(OpenRGBDeviceProvider.Instance, throwExceptions: true);
-
-            foreach (var d in s.Devices)
+            try
             {
-                foreach (var led in d)
+                OpenRGBDeviceProvider.Instance.DeviceDefinitions.Add(new OpenRGBServerDefinition { ClientName = "TestProgram", Ip = "127.0.0.1", Port = 6742 });
+                s.LoadDevices(OpenRGBDeviceProvider.Instance, throwExceptions: true);
+
+                foreach (var d in s.Devices)
                 {
-                    led.Color = new Color(255, 0, 0);
+                    Console.WriteLine($"Found {d.DeviceInfo.DeviceName}");
+                    foreach (var led in d)
+                    {
+                        led.Color = new Color(255, 0, 0);
+                    }
                 }
+
+                s.Update();
+                Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception: {e}");
             }
 
-            s.Update();
-            Console.ReadLine();
         }
     }
 }
