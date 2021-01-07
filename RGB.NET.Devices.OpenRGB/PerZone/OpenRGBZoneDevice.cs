@@ -1,15 +1,16 @@
 ﻿using OpenRGB.NET.Enums;
 using OpenRGB.NET.Models;
 using RGB.NET.Core;
+using System.IO;
 
 namespace RGB.NET.Devices.OpenRGB
 {
-    public class OpenRGBZoneDevice : AbstractOpenRGBDevice<OpenRGBDeviceInfo>
+    public class OpenRGBZoneDevice : AbstractOpenRGBDevice<OpenRGBZoneDeviceInfo>
     {
         private readonly int _initialLed;
         private readonly Zone _zone;
 
-        public OpenRGBZoneDevice(OpenRGBDeviceInfo info, int initialLed, Zone zone) : base(info)
+        public OpenRGBZoneDevice(OpenRGBZoneDeviceInfo info, int initialLed, Zone zone) : base(info)
         {
             _initialLed = initialLed;
             _zone = zone;
@@ -57,7 +58,8 @@ namespace RGB.NET.Devices.OpenRGB
                 }
             }
 
-            LoadLayout();
+            string model = DeviceInfo.Model.Replace(" ", string.Empty).ToUpper();
+            ApplyLayoutFromFile(PathHelper.GetAbsolutePath(this, Path.Combine("Layouts", DeviceInfo.Manufacturer), $"{model}.xml"), null);
         }
     }
 }

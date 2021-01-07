@@ -1,4 +1,4 @@
-﻿using OpenRGB.NET;
+using OpenRGB.NET;
 using OpenRGB.NET.Enums;
 using OpenRGB.NET.Models;
 using RGB.NET.Core;
@@ -121,9 +121,14 @@ namespace RGB.NET.Devices.OpenRGB
             //should probably make this an option
             if (type == RGBDeviceType.LedStripe)
             {
-                foreach (var zone in device.Zones)
+                for (int zoneIndex = 0; zoneIndex < device.Zones.Length; zoneIndex++)
                 {
-                    yield return new OpenRGBZoneDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter), totalLedCount, zone);
+                    Zone zone = device.Zones[zoneIndex];
+
+                    if (zone.LedCount == 0)
+                        continue;
+
+                    yield return new OpenRGBZoneDevice(new OpenRGBZoneDeviceInfo(i, type, device, modelCounter, zoneIndex), totalLedCount, zone);
                     totalLedCount += (int)zone.LedCount;
                 }
             }
