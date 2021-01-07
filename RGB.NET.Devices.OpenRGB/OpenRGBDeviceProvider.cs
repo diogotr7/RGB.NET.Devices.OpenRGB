@@ -86,10 +86,7 @@ namespace RGB.NET.Devices.OpenRGB
                             }
                         }
                     }
-                    catch
-                    {
-                        //we'll always catch this in case one of the connections fails and the others connect properly.
-                    }
+                    catch when (!throwExceptions) { }
                 }
 
                 UpdateTrigger?.Start();
@@ -97,9 +94,7 @@ namespace RGB.NET.Devices.OpenRGB
                 Devices = new ReadOnlyCollection<IRGBDevice>(devices);
                 IsInitialized = true;
             }
-            catch when (!throwExceptions)
-            {
-            }
+            catch when (!throwExceptions) { }
 
             return true;
         }
