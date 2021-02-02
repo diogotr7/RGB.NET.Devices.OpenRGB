@@ -20,7 +20,7 @@ namespace RGB.NET.Devices.OpenRGB
         {
             var ledSize = new Size(19);
             const int ledSpacing = 20;
-            var initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType) + _initialLed;
+            var initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType);
 
             if (_zone.Type == ZoneType.Matrix)
             {
