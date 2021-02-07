@@ -38,7 +38,7 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                             if (!_indexMapping.ContainsKey(ledId))
                                 _indexMapping.Add(ledId, (int)index);
 
-                            InitializeLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize);
+                            AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize);
                         }
                     }
                     y += (int)(zone.MatrixMap.Height * ledSpacing);
@@ -52,7 +52,7 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                         if (!_indexMapping.ContainsKey(ledId))
                             _indexMapping.Add(ledId, (int)(totalleds + i));
 
-                        InitializeLed(ledId, new Point(i * ledSpacing, y), ledSize);
+                        AddLed(ledId, new Point(i * ledSpacing, y), ledSize);
                     }
                 }
 
@@ -61,9 +61,6 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                 y += ledSpacing;
                 totalleds += zone.LedCount;
             }
-
-            string model = DeviceInfo.Model.Replace(" ", string.Empty).ToUpper();
-            ApplyLayoutFromFile(PathHelper.GetAbsolutePath(this, Path.Combine("Layouts", DeviceInfo.Manufacturer), $"{model}.xml"), null);
         }
     }
 }

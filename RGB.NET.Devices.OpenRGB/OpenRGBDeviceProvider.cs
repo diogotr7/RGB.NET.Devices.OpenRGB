@@ -14,15 +14,13 @@ namespace RGB.NET.Devices.OpenRGB
     {
         #region Properties & Fields
 
-        private static OpenRGBDeviceProvider _instance;
+        private static OpenRGBDeviceProvider? _instance;
 
         public static OpenRGBDeviceProvider Instance => _instance ?? new OpenRGBDeviceProvider();
 
         public bool IsInitialized { get; private set; }
 
-        public bool HasExclusiveAccess => false;
-
-        public IEnumerable<IRGBDevice> Devices { get; private set; }
+        public IEnumerable<IRGBDevice> Devices { get; private set; } = Enumerable.Empty<IRGBDevice>();
 
         public List<OpenRGBServerDefinition> DeviceDefinitions { get; } = new List<OpenRGBServerDefinition>();
 
@@ -44,13 +42,13 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Methods
 
-        public bool Initialize(RGBDeviceType loadFilter = RGBDeviceType.All, bool exclusiveAccessIfPossible = false, bool throwExceptions = false)
+        public bool Initialize(RGBDeviceType loadFilter = RGBDeviceType.All, bool throwExceptions = false)
         {
             IsInitialized = false;
 
             try
             {
-                UpdateTrigger?.Stop();
+                UpdateTrigger.Stop();
 
                 IList<IRGBDevice> devices = new List<IRGBDevice>();
 
@@ -75,7 +73,7 @@ namespace RGB.NET.Devices.OpenRGB
                             if (!loadFilter.HasFlag(Helper.GetRgbNetDeviceType(device.Type)))
                                 continue;
 
-                            OpenRGBUpdateQueue updateQueue = null;
+                            OpenRGBUpdateQueue? updateQueue = null;
                             foreach (var dev in GetRGBDevice(i, device, modelCounter))
                             {
                                 if (updateQueue is null)
@@ -99,13 +97,12 @@ namespace RGB.NET.Devices.OpenRGB
             return true;
         }
 
-        public void ResetDevices()
-        { }
-
         public void Dispose()
         {
-            try { UpdateTrigger?.Dispose(); }
+            try { UpdateTrigger.Dispose(); }
             catch { /* at least we tried */ }
+
+            Devices = Enumerable.Empty<IRGBDevice>();
         }
 
         private static IEnumerable<IOpenRGBDevice> GetRGBDevice(int i, Device device, Dictionary<string, int> modelCounter)

@@ -8,14 +8,12 @@ namespace RGB.NET.Devices.OpenRGB
     public abstract class AbstractOpenRGBDeviceInfo : IRGBDeviceInfo
     {
         public RGBDeviceType DeviceType { get; protected set; }
-        public string DeviceName { get; protected set; }
-        public string Manufacturer { get; protected set; }
-        public string Model { get; protected set; }
-        public RGBDeviceLighting Lighting { get; protected set; }
-        public Uri Image { get; set; }
-        public OpenRGBDevice OpenRGBDevice { get; protected set; }
+        public string DeviceName { get; protected set; } = null!;
+        public string Manufacturer { get; protected set; } = null!;
+        public string Model { get; protected set; } = null!;
+        public object? LayoutMetadata { get; set; }
+        public OpenRGBDevice OpenRGBDevice { get; protected set; } = null!;
         public int OpenRGBDeviceIndex { get; protected set; }
-
 
         protected virtual string GetUniqueModelName(Dictionary<string, int> modelCounter)
         {

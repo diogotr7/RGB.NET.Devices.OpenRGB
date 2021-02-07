@@ -13,7 +13,7 @@ namespace RGB.NET.Devices.OpenRGB
 
         public override TDeviceInfo DeviceInfo { get; }
 
-        private OpenRGBUpdateQueue UpdateQueue { get; set; }
+        private OpenRGBUpdateQueue? UpdateQueue { get; set; }
 
         protected readonly Dictionary<LedId, int> _indexMapping = new Dictionary<LedId, int>();
 
@@ -45,9 +45,9 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected abstract void InitializeLayout();
 
-        protected override void UpdateLeds(IEnumerable<Led> ledsToUpdate) => UpdateQueue.SetData(ledsToUpdate.Where(x => x.Color.A > 0));
+        protected override void UpdateLeds(IEnumerable<Led> ledsToUpdate) => UpdateQueue?.SetData(ledsToUpdate.Where(x => x.Color.A > 0));
 
-        protected override object CreateLedCustomData(LedId ledId)
+        protected override object? GetLedCustomData(LedId ledId)
         {
             if (!_indexMapping.TryGetValue(ledId, out int index))
                 return null;
