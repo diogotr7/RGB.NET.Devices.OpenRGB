@@ -20,7 +20,7 @@ namespace RGB.NET.Devices.OpenRGB
         {
             var ledSize = new Size(19);
             const int ledSpacing = 20;
-            var initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType);
+            var initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType) + _initialLed;
 
             if (_zone.Type == ZoneType.Matrix)
             {
@@ -34,14 +34,15 @@ namespace RGB.NET.Devices.OpenRGB
                         if (index == uint.MaxValue)
                             continue;
 
-                        var ledId = StandardKeyNames.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[index].Name, out var l)
+                        var ledId = StandardKeyNames.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[_initialLed + index].Name, out var l)
                             ? l
                             : initial++;
 
                         if (!_indexMapping.ContainsKey(ledId))
-                            _indexMapping.Add(ledId, (int)index);
-
-                        AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize);
+                        {
+                            _indexMapping.Add(ledId, _initialLed + (int)index);
+                            AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize);
+                        }
                     }
                 }
             }
@@ -52,9 +53,10 @@ namespace RGB.NET.Devices.OpenRGB
                     var ledId = initial++;
 
                     if (!_indexMapping.ContainsKey(ledId))
+                    {
                         _indexMapping.Add(ledId, _initialLed + i);
-
-                    AddLed(ledId, new Point(ledSpacing * i, 0), ledSize);
+                        AddLed(ledId, new Point(ledSpacing * i, 0), ledSize);
+                    }
                 }
             }
         }

@@ -41,7 +41,7 @@ namespace RGB.NET.Devices.OpenRGB
             if (Count <= OpenRGBDevice.Zones.Length)
                 return $"{Manufacturer} {Model} - {ZoneName}";
             else
-                return $"{Manufacturer} {Model} {(Count - 1) / OpenRGBDevice.Zones.Length + 1} - {ZoneName}";
+                return $"{Manufacturer} {Model} {((Count - 1) / OpenRGBDevice.Zones.Length) + 1} - {ZoneName}";
         }
     }
 }

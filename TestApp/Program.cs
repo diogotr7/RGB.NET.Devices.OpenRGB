@@ -8,19 +8,20 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            var s = RGBSurface.Instance;
+            var s = new RGBSurface();
 
             try
             {
                 OpenRGBDeviceProvider.Instance.DeviceDefinitions.Add(new OpenRGBServerDefinition { ClientName = "TestProgram", Ip = "127.0.0.1", Port = 6742 });
-                s.LoadDevices(OpenRGBDeviceProvider.Instance, throwExceptions: true);
+                OpenRGBDeviceProvider.Instance.Initialize();
+                s.Attach(OpenRGBDeviceProvider.Instance.Devices);
 
                 foreach (var d in s.Devices)
                 {
                     Console.WriteLine($"Found {d.DeviceInfo.DeviceName}");
                     foreach (var led in d)
                     {
-                        led.Color = new Color(255, 0, 0);
+                        led.Color = new Color(255, 255, 255);
                     }
                 }
 
@@ -31,7 +32,6 @@ namespace TestApp
             {
                 Console.WriteLine($"Exception: {e}");
             }
-
         }
     }
 }

@@ -35,12 +35,6 @@ namespace RGB.NET.Devices.OpenRGB
             UpdateQueue = updateQueue;
 
             InitializeLayout();
-
-            if (Size == Size.Invalid)
-            {
-                Rectangle ledRectangle = new Rectangle(this.Select(x => x.LedRectangle));
-                Size = ledRectangle.Size + new Size(ledRectangle.Location.X, ledRectangle.Location.Y);
-            }
         }
 
         protected abstract void InitializeLayout();
