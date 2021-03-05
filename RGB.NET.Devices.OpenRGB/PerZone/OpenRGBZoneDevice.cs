@@ -1,7 +1,6 @@
 ﻿using OpenRGB.NET.Enums;
 using OpenRGB.NET.Models;
 using RGB.NET.Core;
-using System.IO;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -10,17 +9,20 @@ namespace RGB.NET.Devices.OpenRGB
         private readonly int _initialLed;
         private readonly Zone _zone;
 
-        public OpenRGBZoneDevice(OpenRGBZoneDeviceInfo info, int initialLed, Zone zone) : base(info)
+        public OpenRGBZoneDevice(OpenRGBZoneDeviceInfo info, int initialLed, Zone zone, IUpdateQueue updateQueue)
+            : base(info, updateQueue)
         {
             _initialLed = initialLed;
             _zone = zone;
+
+            InitializeLayout();
         }
 
-        protected override void InitializeLayout()
+        private void InitializeLayout()
         {
-            var ledSize = new Size(19);
+            Size ledSize = new Size(19);
             const int ledSpacing = 20;
-            var initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType) + _initialLed;
+            LedId initial = Helper.GetInitialLedIdForDeviceType(DeviceInfo.DeviceType) + _initialLed;
 
             if (_zone.Type == ZoneType.Matrix)
             {
@@ -28,13 +30,13 @@ namespace RGB.NET.Devices.OpenRGB
                 {
                     for (int column = 0; column < _zone.MatrixMap.Width; column++)
                     {
-                        var index = _zone.MatrixMap.Matrix[row, column];
+                        uint index = _zone.MatrixMap.Matrix[row, column];
 
                         //will be max value if the position does not have an associated key
                         if (index == uint.MaxValue)
                             continue;
 
-                        var ledId = StandardKeyNames.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[_initialLed + index].Name, out var l)
+                        LedId ledId = StandardKeyNames.Default.TryGetValue(DeviceInfo.OpenRGBDevice.Leds[_initialLed + index].Name, out LedId l)
                             ? l
                             : initial++;
 
@@ -50,7 +52,7 @@ namespace RGB.NET.Devices.OpenRGB
             {
                 for (int i = 0; i < _zone.LedCount; i++)
                 {
-                    var ledId = initial++;
+                    LedId ledId = initial++;
 
                     if (!_indexMapping.ContainsKey(ledId))
                     {

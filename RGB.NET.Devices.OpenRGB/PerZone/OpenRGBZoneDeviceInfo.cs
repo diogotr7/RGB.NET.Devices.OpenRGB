@@ -1,5 +1,4 @@
 ﻿using RGB.NET.Core;
-using System;
 using System.Collections.Generic;
 using OpenRGBDevice = OpenRGB.NET.Models.Device;
 
@@ -32,7 +31,7 @@ namespace RGB.NET.Devices.OpenRGB
 
         protected override string GetUniqueModelName(Dictionary<string, int> modelCounter)
         {
-            if (!modelCounter.TryGetValue(Model, out var Count))
+            if (!modelCounter.TryGetValue(Model, out int Count))
                 modelCounter.Add(Model, 0);
 
             Count++;

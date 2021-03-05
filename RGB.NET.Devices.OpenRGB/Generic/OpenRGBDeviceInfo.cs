@@ -1,5 +1,4 @@
 ﻿using RGB.NET.Core;
-using System;
 using System.Collections.Generic;
 using OpenRGBDevice = OpenRGB.NET.Models.Device;
 

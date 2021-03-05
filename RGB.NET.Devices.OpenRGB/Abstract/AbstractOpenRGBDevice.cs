@@ -1,8 +1,5 @@
-﻿using OpenRGB.NET.Enums;
-using RGB.NET.Core;
+﻿using RGB.NET.Core;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -11,35 +8,19 @@ namespace RGB.NET.Devices.OpenRGB
     {
         #region Properties & Fields
 
-        public override TDeviceInfo DeviceInfo { get; }
-
-        private OpenRGBUpdateQueue? UpdateQueue { get; set; }
-
         protected readonly Dictionary<LedId, int> _indexMapping = new Dictionary<LedId, int>();
 
         #endregion
 
         #region Constructors
 
-        protected AbstractOpenRGBDevice(TDeviceInfo info)
-        {
-            DeviceInfo = info;
-        }
+        protected AbstractOpenRGBDevice(TDeviceInfo info, IUpdateQueue updateQueue)
+            : base(info, updateQueue)
+        { }
 
         #endregion
 
         #region Methods
-
-        public void Initialize(OpenRGBUpdateQueue updateQueue)
-        {
-            UpdateQueue = updateQueue;
-
-            InitializeLayout();
-        }
-
-        protected abstract void InitializeLayout();
-
-        protected override void UpdateLeds(IEnumerable<Led> ledsToUpdate) => UpdateQueue?.SetData(ledsToUpdate.Where(x => x.Color.A > 0));
 
         protected override object? GetLedCustomData(LedId ledId)
         {
@@ -48,6 +29,7 @@ namespace RGB.NET.Devices.OpenRGB
 
             return index;
         }
+
         #endregion
     }
 }

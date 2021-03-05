@@ -1,9 +1,6 @@
 ﻿using OpenRGB.NET;
-using OpenRGB.NET.Enums;
 using RGB.NET.Core;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using OpenRGBColor = OpenRGB.NET.Models.Color;
 using OpenRGBDevice = OpenRGB.NET.Models.Device;
@@ -37,11 +34,11 @@ namespace RGB.NET.Devices.OpenRGB
 
         #region Methods
 
-        protected override void Update(Dictionary<object, Color> dataSet)
+        protected override void Update(in ReadOnlySpan<(object key, Color color)> dataSet)
         {
-            foreach(var data in dataSet)
+            foreach ((object key, Color color) in dataSet)
             {
-                _colors[(int)data.Key] = new OpenRGBColor(data.Value.GetR(), data.Value.GetG(), data.Value.GetB());
+                _colors[(int)key] = new OpenRGBColor(color.GetR(), color.GetG(), color.GetB());
             }
 
             _openRGB.UpdateLeds(_deviceid, _colors);
