@@ -20,6 +20,8 @@ namespace RGB.NET.Devices.OpenRGB
 
         public List<OpenRGBServerDefinition> DeviceDefinitions { get; } = new List<OpenRGBServerDefinition>();
 
+        public bool ForceAddAllDevices { get; set; }
+
         public RGBDeviceType PerZoneDeviceFlag { get; } = RGBDeviceType.LedStripe | RGBDeviceType.Mainboard;
 
         #endregion
@@ -65,7 +67,7 @@ namespace RGB.NET.Devices.OpenRGB
                     Device? device = openRgb.GetControllerData(i);
 
                     //if the device doesn't have a direct mode, don't add it
-                    if (!device.Modes.Any(m => m.Name == "Direct"))
+                    if (!device.Modes.Any(m => m.Name == "Direct") && !ForceAddAllDevices)
                         continue;
 
                     OpenRGBUpdateQueue? updateQueue = new OpenRGBUpdateQueue(GetUpdateTrigger(), i, openRgb, device);
@@ -104,6 +106,7 @@ namespace RGB.NET.Devices.OpenRGB
 
             _clients.Clear();
             DeviceDefinitions.Clear();
+            ForceAddAllDevices = false;
             Devices = Enumerable.Empty<IRGBDevice>();
         }
         #endregion
