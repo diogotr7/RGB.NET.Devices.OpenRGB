@@ -40,11 +40,7 @@ namespace RGB.NET.Devices.OpenRGB
                             ? l
                             : initial++;
 
-                        if (!_indexMapping.ContainsKey(ledId))
-                        {
-                            _indexMapping.Add(ledId, _initialLed + (int)index);
-                            AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize);
-                        }
+                        AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize, _initialLed + (int)index);
                     }
                 }
             }
@@ -54,11 +50,7 @@ namespace RGB.NET.Devices.OpenRGB
                 {
                     LedId ledId = initial++;
 
-                    if (!_indexMapping.ContainsKey(ledId))
-                    {
-                        _indexMapping.Add(ledId, _initialLed + i);
-                        AddLed(ledId, new Point(ledSpacing * i, 0), ledSize);
-                    }
+                    AddLed(ledId, new Point(ledSpacing * i, 0), ledSize, _initialLed + i);
                 }
             }
         }
