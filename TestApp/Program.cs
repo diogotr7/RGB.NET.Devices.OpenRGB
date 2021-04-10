@@ -40,6 +40,7 @@ namespace TestApp
                 }
 
                 Console.ReadLine();
+                surface?.Dispose();
 
                 foreach (IRGBDeviceProvider dp in deviceProviders)
                     dp.Dispose();
