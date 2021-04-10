@@ -46,10 +46,12 @@ namespace RGB.NET.Devices.OpenRGB
                 {
                     OpenRGBClient? openRgb = new OpenRGBClient(ip: deviceDefinition.Ip, port: deviceDefinition.Port, name: deviceDefinition.ClientName, autoconnect: true);
                     _clients.Add(openRgb);
+                    deviceDefinition.Connected = true;
                 }
                 catch (Exception e)
                 {
-                    Throw(e);
+                    deviceDefinition.Connected = false;
+                    deviceDefinition.LastError = e.Message;
                 }
             }
         }
