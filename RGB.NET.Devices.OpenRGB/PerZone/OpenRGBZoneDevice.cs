@@ -40,7 +40,8 @@ namespace RGB.NET.Devices.OpenRGB
                             ? l
                             : initial++;
 
-                        AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize, _initialLed + (int)index);
+                        while (AddLed(ledId, new Point(ledSpacing * column, ledSpacing * row), ledSize, _initialLed + (int)index) == null)
+                            ledId = initial++;
                     }
                 }
             }
@@ -50,7 +51,8 @@ namespace RGB.NET.Devices.OpenRGB
                 {
                     LedId ledId = initial++;
 
-                    AddLed(ledId, new Point(ledSpacing * i, 0), ledSize, _initialLed + i);
+                    while (AddLed(ledId, new Point(ledSpacing * i, 0), ledSize, _initialLed + i) == null)
+                        ledId = initial++;
                 }
             }
         }

@@ -38,7 +38,11 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                                 ? l
                                 : initial++;
 
-                            AddLed(ledId, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize, zoneLedIndex + (int)index);
+                            //HACK: doing this because some different Led Names are mapped to the same LedId
+                            //for example, "Enter" and "ISO Enter".
+                            //this way, at least they'll be controllable as CustomX
+                            while (AddLed(ledId, new Point(ledSpacing * column, y + (ledSpacing * row)), ledSize, zoneLedIndex + (int)index) == null)
+                                ledId = initial++;
                         }
                     }
                     y += (int)(zone.MatrixMap.Height * ledSpacing);
@@ -49,7 +53,8 @@ namespace RGB.NET.Devices.OpenRGB.Generic
                     {
                         LedId ledId = initial++;
 
-                        AddLed(ledId, new Point(i * ledSpacing, y), ledSize, zoneLedIndex + i);
+                        while (AddLed(ledId, new Point(ledSpacing * i, y), ledSize, zoneLedIndex + i) == null)
+                            ledId = initial++;
                     }
                 }
 

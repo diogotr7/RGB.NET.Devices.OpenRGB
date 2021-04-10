@@ -43,7 +43,7 @@ namespace RGB.NET.Devices.OpenRGB
             { "Key: 8"                , LedId.Keyboard_8                       },
             { "Key: 9"                , LedId.Keyboard_9                       },
             { "Key: 0"                , LedId.Keyboard_0                       },
-            //{ "Key: Enter"            , LedId.Keyboard_Enter                   },//TODO: Fix
+            { "Key: Enter"            , LedId.Keyboard_Enter                   },
             { "Key: Enter (ISO)"      , LedId.Keyboard_Enter                   },
             { "Key: Escape"           , LedId.Keyboard_Escape                  },
             { "Key: Backspace"        , LedId.Keyboard_Backspace               },
@@ -104,8 +104,8 @@ namespace RGB.NET.Devices.OpenRGB
             { "Key: Number Pad 9"     , LedId.Keyboard_Num9                    },
             { "Key: Number Pad 0"     , LedId.Keyboard_Num0                    },
             { "Key: Number Pad ."     , LedId.Keyboard_NumPeriodAndDelete      },
-            //{ "Key: Left Fn"          , LedId.Keyboard_LeftFn                  },
-            //{ "Key: Right Fn"         , LedId.Keyboard_Fn_key                  },
+            { "Key: Left Fn"          , LedId.Keyboard_Function                },
+            { "Key: Right Fn"         , LedId.Keyboard_Function                },
             { "Key: \\ (ISO)"         , LedId.Keyboard_NonUsBackslash          },
             { "Key: Menu"             , LedId.Keyboard_Application             },
             { "Key: Left Control"     , LedId.Keyboard_LeftCtrl                },
@@ -130,15 +130,15 @@ namespace RGB.NET.Devices.OpenRGB
             { "Key: M3"               , LedId.Keyboard_Macro3                  },
             { "Key: M4"               , LedId.Keyboard_Macro4                  },
             { "Key: M5"               , LedId.Keyboard_Macro5                  },
-            //{ "Key: G0"               , LedId.Keyboard_G0                      },
-            //{ "Key: G1"               , LedId.Keyboard_G1                      },
-            //{ "Key: G2"               , LedId.Keyboard_G2                      },
-            //{ "Key: G3"               , LedId.Keyboard_G3                      },
-            { "Lighting"              , LedId.Keyboard_Brightness},
-            { "Game Mode"             , LedId.Keyboard_WinLock},
-            { "Caps Lock Indicator"   , LedId.Custom1},
-            { "Scroll Lock Indicator" , LedId.Custom2},
-            { "Num Lock Indicator"    , LedId.Custom3}
+            { "Key: G0"               , LedId.Keyboard_Programmable32          },
+            { "Key: G1"               , LedId.Keyboard_Programmable1           },
+            { "Key: G2"               , LedId.Keyboard_Programmable2           },
+            { "Key: G3"               , LedId.Keyboard_Programmable3           },
+            { "Lighting"              , LedId.Keyboard_Brightness              },
+            { "Game Mode"             , LedId.Keyboard_WinLock                 },
+            //{ "Caps Lock Indicator"   , LedId.Custom1                          },
+            //{ "Scroll Lock Indicator" , LedId.Custom2                          },
+            //{ "Num Lock Indicator"    , LedId.Custom3                          }
         };
     }
 }
