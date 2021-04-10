@@ -106,7 +106,6 @@ namespace RGB.NET.Devices.OpenRGB
 
             _clients.Clear();
             DeviceDefinitions.Clear();
-            ForceAddAllDevices = false;
             Devices = Enumerable.Empty<IRGBDevice>();
         }
         #endregion
