@@ -71,6 +71,7 @@ namespace RGB.NET.Devices.OpenRGB
                     //if the device doesn't have a direct mode, don't add it
                     if (!device.Modes.Any(m => m.Name == "Direct") && !ForceAddAllDevices)
                         continue;
+                    openRgb.SetMode(i, 0);
 
                     OpenRGBUpdateQueue? updateQueue = new OpenRGBUpdateQueue(GetUpdateTrigger(), i, openRgb, device);
 
