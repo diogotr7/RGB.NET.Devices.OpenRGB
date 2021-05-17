@@ -3,9 +3,9 @@ using RGB.NET.Core;
 
 namespace RGB.NET.Devices.OpenRGB.Generic
 {
-    public class OpenRGBGenericDevice : AbstractOpenRGBDevice<OpenRGBDeviceInfo>
+    public class OpenRGBGenericDevice : AbstractOpenRGBDevice<OpenRGBGenericDeviceInfo>
     {
-        public OpenRGBGenericDevice(OpenRGBDeviceInfo info, IUpdateQueue updateQueue)
+        public OpenRGBGenericDevice(OpenRGBGenericDeviceInfo info, IUpdateQueue updateQueue)
             : base(info, updateQueue)
         {
             InitializeLayout();

@@ -1,5 +1,6 @@
 ﻿using OpenRGB.NET.Enums;
 using RGB.NET.Core;
+using OpenRGBDevice = OpenRGB.NET.Models.Device;
 
 namespace RGB.NET.Devices.OpenRGB
 {
@@ -41,5 +42,13 @@ namespace RGB.NET.Devices.OpenRGB
 
         public static LedId GetInitialLedIdForDeviceType(DeviceType type) =>
             GetInitialLedIdForDeviceType(GetRgbNetDeviceType(type));
+
+        public static string GetVendorName(OpenRGBDevice openRGBDevice) => string.IsNullOrWhiteSpace(openRGBDevice.Vendor)
+                ? "OpenRGB"
+                : openRGBDevice.Vendor;
+
+        public static string GetModelName(OpenRGBDevice openRGBDevice) => string.IsNullOrWhiteSpace(openRGBDevice.Vendor)
+                ? openRGBDevice.Name
+                : openRGBDevice.Name.Replace(openRGBDevice.Vendor, "").Trim();
     }
 }

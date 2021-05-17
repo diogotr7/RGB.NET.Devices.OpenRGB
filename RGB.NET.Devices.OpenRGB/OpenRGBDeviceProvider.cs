@@ -52,14 +52,13 @@ namespace RGB.NET.Devices.OpenRGB
                 {
                     deviceDefinition.Connected = false;
                     deviceDefinition.LastError = e.Message;
+                    Throw(e, false);
                 }
             }
         }
 
         protected override IEnumerable<IRGBDevice> LoadDevices()
         {
-            Dictionary<string, int>? modelCounter = new Dictionary<string, int>();
-
             foreach (OpenRGBClient? openRgb in _clients)
             {
                 int deviceCount = openRgb.GetControllerCount();
@@ -78,6 +77,14 @@ namespace RGB.NET.Devices.OpenRGB
                     if (PerZoneDeviceFlag.HasFlag(type))
                     {
                         int totalLedCount = 0;
+                        // HACK: this is needed because:
+                        // 1. Device names can be repeated, 
+                        //    we need to make then unique
+                        // 2. Zone names can also be unique,
+                        //    we need to handle multiple devices
+                        //    with repeated names and zone names...
+                        Dictionary<string, int> modelCounter = new();
+                        string deviceName = DeviceHelper.CreateDeviceName(Helper.GetVendorName(device), Helper.GetModelName(device)); ;
 
                         for (int zoneIndex = 0; zoneIndex < device.Zones.Length; zoneIndex++)
                         {
@@ -86,13 +93,27 @@ namespace RGB.NET.Devices.OpenRGB
                             if (zone.LedCount == 0)
                                 continue;
 
-                            yield return new OpenRGBZoneDevice(new OpenRGBZoneDeviceInfo(i, type, device, modelCounter, zoneIndex), totalLedCount, zone, updateQueue);
+                            string zoneName = zone.Name;
+                            string zoneDeviceName;
+
+                            if (modelCounter.ContainsKey(zoneName))
+                            {
+                                int counter = ++modelCounter[zoneName];
+                                zoneDeviceName = $"{deviceName} {zone.Name} ({counter})";
+                            }
+                            else
+                            {
+                                modelCounter.Add(zoneName, 1);
+                                zoneDeviceName = $"{deviceName} {zone.Name}";
+                            }
+                            
+                            yield return new OpenRGBZoneDevice(new OpenRGBZoneDeviceInfo(device, zoneDeviceName), totalLedCount, zone, updateQueue);
                             totalLedCount += (int)zone.LedCount;
                         }
                     }
                     else
                     {
-                        yield return new OpenRGBGenericDevice(new OpenRGBDeviceInfo(i, type, device, modelCounter), updateQueue);
+                        yield return new OpenRGBGenericDevice(new OpenRGBGenericDeviceInfo(device), updateQueue);
                     }
                 }
             }

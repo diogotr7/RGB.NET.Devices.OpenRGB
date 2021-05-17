@@ -6,26 +6,20 @@ namespace RGB.NET.Devices.OpenRGB
 {
     public abstract class AbstractOpenRGBDeviceInfo : IRGBDeviceInfo
     {
-        public RGBDeviceType DeviceType { get; protected set; }
-        public string DeviceName { get; protected set; } = null!;
-        public string Manufacturer { get; protected set; } = null!;
-        public string Model { get; protected set; } = null!;
+        public RGBDeviceType DeviceType { get; }
+        public string DeviceName { get; }
+        public string Manufacturer { get; }
+        public string Model { get; }
         public object? LayoutMetadata { get; set; }
-        public OpenRGBDevice OpenRGBDevice { get; protected set; } = null!;
-        public int OpenRGBDeviceIndex { get; protected set; }
+        public OpenRGBDevice OpenRGBDevice { get; }
 
-        protected virtual string GetUniqueModelName(Dictionary<string, int> modelCounter)
+        protected AbstractOpenRGBDeviceInfo(OpenRGBDevice openRGBDevice, string? deviceName = null)
         {
-            if (modelCounter.ContainsKey(Model))
-            {
-                int counter = ++modelCounter[Model];
-                return $"{Manufacturer} {Model} {counter}";
-            }
-            else
-            {
-                modelCounter.Add(Model, 1);
-                return $"{Manufacturer} {Model}";
-            }
+            OpenRGBDevice = openRGBDevice;
+            DeviceType = Helper.GetRgbNetDeviceType(openRGBDevice.Type);
+            Manufacturer = Helper.GetVendorName(openRGBDevice);
+            Model = Helper.GetModelName(openRGBDevice);
+            DeviceName = deviceName ?? DeviceHelper.CreateDeviceName(Manufacturer, Model);
         }
     }
 }
