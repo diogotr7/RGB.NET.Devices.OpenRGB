@@ -73,18 +73,9 @@ namespace RGB.NET.Devices.OpenRGB
 
                     OpenRGBUpdateQueue? updateQueue = new OpenRGBUpdateQueue(GetUpdateTrigger(), i, openRgb, device);
 
-                    RGBDeviceType type = Helper.GetRgbNetDeviceType(device.Type);
-                    if (PerZoneDeviceFlag.HasFlag(type))
+                    if (PerZoneDeviceFlag.HasFlag(Helper.GetRgbNetDeviceType(device.Type)))
                     {
                         int totalLedCount = 0;
-                        // HACK: this is needed because:
-                        // 1. Device names can be repeated, 
-                        //    we need to make then unique
-                        // 2. Zone names can also be unique,
-                        //    we need to handle multiple devices
-                        //    with repeated names and zone names...
-                        Dictionary<string, int> modelCounter = new();
-                        string deviceName = DeviceHelper.CreateDeviceName(Helper.GetVendorName(device), Helper.GetModelName(device)); ;
 
                         for (int zoneIndex = 0; zoneIndex < device.Zones.Length; zoneIndex++)
                         {
@@ -93,21 +84,7 @@ namespace RGB.NET.Devices.OpenRGB
                             if (zone.LedCount == 0)
                                 continue;
 
-                            string zoneName = zone.Name;
-                            string zoneDeviceName;
-
-                            if (modelCounter.ContainsKey(zoneName))
-                            {
-                                int counter = ++modelCounter[zoneName];
-                                zoneDeviceName = $"{deviceName} {zone.Name} ({counter})";
-                            }
-                            else
-                            {
-                                modelCounter.Add(zoneName, 1);
-                                zoneDeviceName = $"{deviceName} {zone.Name}";
-                            }
-                            
-                            yield return new OpenRGBZoneDevice(new OpenRGBZoneDeviceInfo(device, zoneDeviceName), totalLedCount, zone, updateQueue);
+                            yield return new OpenRGBZoneDevice(new OpenRGBZoneDeviceInfo(device), totalLedCount, zone, updateQueue);
                             totalLedCount += (int)zone.LedCount;
                         }
                     }

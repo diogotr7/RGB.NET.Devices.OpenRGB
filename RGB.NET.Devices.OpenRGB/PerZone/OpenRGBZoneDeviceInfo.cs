@@ -6,7 +6,7 @@ namespace RGB.NET.Devices.OpenRGB
 {
     public class OpenRGBZoneDeviceInfo : AbstractOpenRGBDeviceInfo
     {
-        public OpenRGBZoneDeviceInfo(OpenRGBDevice device, string deviceName) : base(device, deviceName)
+        public OpenRGBZoneDeviceInfo(OpenRGBDevice device) : base(device)
         { }
     }
 }

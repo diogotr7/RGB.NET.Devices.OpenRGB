@@ -13,13 +13,13 @@ namespace RGB.NET.Devices.OpenRGB
         public object? LayoutMetadata { get; set; }
         public OpenRGBDevice OpenRGBDevice { get; }
 
-        protected AbstractOpenRGBDeviceInfo(OpenRGBDevice openRGBDevice, string? deviceName = null)
+        protected AbstractOpenRGBDeviceInfo(OpenRGBDevice openRGBDevice)
         {
             OpenRGBDevice = openRGBDevice;
             DeviceType = Helper.GetRgbNetDeviceType(openRGBDevice.Type);
             Manufacturer = Helper.GetVendorName(openRGBDevice);
             Model = Helper.GetModelName(openRGBDevice);
-            DeviceName = deviceName ?? DeviceHelper.CreateDeviceName(Manufacturer, Model);
+            DeviceName = DeviceHelper.CreateDeviceName(Manufacturer, Model);
         }
     }
 }
