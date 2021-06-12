@@ -98,6 +98,8 @@ namespace RGB.NET.Devices.OpenRGB
 
         public override void Dispose()
         {
+            base.Dispose();
+
             foreach (OpenRGBClient? client in _clients)
             {
                 try { client?.Dispose(); }
